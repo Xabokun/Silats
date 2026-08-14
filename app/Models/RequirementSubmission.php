@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class RequirementSubmission extends Model { protected $fillable=['registration_id','requirement_id','file_path','status','note','verified_by','verified_at']; protected $casts=['verified_at'=>'datetime']; public function registration(){return $this->belongsTo(PracticumRegistration::class);} public function requirement(){return $this->belongsTo(PracticumRequirement::class);} }

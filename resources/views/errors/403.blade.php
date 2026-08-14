@@ -1,0 +1,1 @@
+@extends('layouts.app') @section('title','Akses Ditolak') @section('content')<div class="container py-5 text-center"><h1 class="display-4 fw-bold">403</h1><p>{{ $exception->getMessage() ?: 'Anda tidak memiliki hak akses ke halaman ini.' }}</p><a class="btn btn-primary" href="{{ route('dashboard') }}">Kembali</a></div>@endsection

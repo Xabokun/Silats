@@ -1,0 +1,2 @@
+<?php
+namespace App\Http\Controllers; use Illuminate\Http\Request; class DashboardController extends Controller { public function index(Request $request){ return match($request->user()->role){ 'admin'=>redirect()->route('admin.dashboard'), 'mahasiswa'=>redirect()->route('mahasiswa.dashboard'), 'dosen'=>redirect()->route('dosen.dashboard'), 'tenaga_labor'=>redirect()->route('tenaga-labor.dashboard'), 'kepala_labor'=>redirect()->route('kepala-labor.dashboard'), 'prodi'=>redirect()->route('prodi.dashboard'), 'umum'=>redirect()->route('umum.dashboard'), default=>abort(403)}; } }

@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class TestingService extends Model { protected $fillable=['testing_category_id','laboratory_id','code','name','description','requirements','is_active']; protected $casts=['is_active'=>'boolean']; public function category(){return $this->belongsTo(TestingCategory::class,'testing_category_id');} public function laboratory(){return $this->belongsTo(Laboratory::class);} public function requests(){return $this->hasMany(TestingRequest::class);} }

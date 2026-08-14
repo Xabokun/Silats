@@ -1,0 +1,2 @@
+<?php
+namespace App\Http\Controllers; use App\Models\Laboratory; class ProgramStudyController extends Controller { public function dashboard(){ $labs=Laboratory::withCount(['classes','users'])->with(['testingServices'=>fn($q)=>$q->withCount(['requests as active_requests_count'=>fn($x)=>$x->whereIn('status',['pending_sample','sample_received','testing']),'requests as completed_requests_count'=>fn($x)=>$x->where('status','completed')])])->get(); return view('prodi.dashboard',compact('labs')); } }

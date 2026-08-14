@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class LetterType extends Model { protected $fillable=['code','title','description','created_by','is_active']; protected $casts=['is_active'=>'boolean']; public function requirements(){return $this->hasMany(LetterRequirement::class);} public function workflowSteps(){return $this->hasMany(LetterWorkflowStep::class)->orderBy('step_order');} public function requests(){return $this->hasMany(LetterRequest::class);} }

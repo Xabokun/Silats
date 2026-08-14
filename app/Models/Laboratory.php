@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Factories\HasFactory; class Laboratory extends Model { use HasFactory; protected $fillable=['code','name','description','address']; public function users(){return $this->hasMany(User::class);} public function classes(){return $this->hasMany(PracticumClass::class);} public function testingServices(){return $this->hasMany(TestingService::class);} }

@@ -1,0 +1,8 @@
+<?php
+namespace App\Http\Controllers; use App\Models\{TestingHistory,TestingRequest,TestingService}; use Illuminate\Http\Request; use Illuminate\Support\Facades\DB; use Illuminate\Support\Str;
+class PublicTestingController extends Controller {
+ public function dashboard(Request $r){ $requests=TestingRequest::with(['service.category','service.laboratory','result'])->where('applicant_id',$r->user()->id)->latest()->get(); return view('umum.dashboard',compact('requests')); }
+ public function create(){ $services=TestingService::with(['category','laboratory'])->where('is_active',true)->get(); return view('umum.create-test',compact('services')); }
+ public function store(Request $r){ $d=$r->validate(['testing_service_id'=>'required|exists:testing_services,id','sample_description'=>'required|string|max:1000','purpose'=>'nullable|string|max:2000','notes'=>'nullable|string|max:2000']); $req=null; DB::transaction(function() use($r,$d,&$req){ $req=TestingRequest::create($d+['request_number'=>'UJI-'.now()->format('Ymd').'-'.strtoupper(Str::random(5)),'applicant_id'=>$r->user()->id,'status'=>'pending_sample','submitted_at'=>now()]); TestingHistory::create(['testing_request_id'=>$req->id,'status'=>'pending_sample','description'=>'Permohonan dibuat. Silakan bawa sampel ke laboratorium tujuan.','updated_by'=>$r->user()->id]); }); return redirect()->route('umum.tests.show',$req)->with('success','Permohonan pengujian berhasil dibuat.'); }
+ public function show(Request $r,TestingRequest $testingRequest){ abort_unless($testingRequest->applicant_id===$r->user()->id,403); $testingRequest->load(['service.category','service.laboratory','samples','histories.updater','result']); return view('umum.test-show',compact('testingRequest')); }
+}

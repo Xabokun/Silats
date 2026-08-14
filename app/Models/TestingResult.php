@@ -1,0 +1,2 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; class TestingResult extends Model { protected $fillable=['testing_request_id','letter_number','result_summary','result_file','issued_by','issued_at']; protected $casts=['issued_at'=>'datetime']; public function request(){return $this->belongsTo(TestingRequest::class,'testing_request_id');} public function issuer(){return $this->belongsTo(User::class,'issued_by');} }
