@@ -75,7 +75,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/kepala-labor', [HeadLabController::class, 'dashboard'])->name('kepala-labor.dashboard')->middleware('role:kepala_labor');
-    Route::get('/prodi', [ProgramStudyController::class, 'dashboard'])->name('prodi.dashboard')->middleware('role:prodi');
+    Route::prefix('prodi')->name('prodi.')->middleware('role:prodi')->group(function () {
+        Route::get('/', [ProgramStudyController::class, 'dashboard'])->name('dashboard');
+        Route::get('/kelas-praktikum', [ProgramStudyController::class, 'classes'])->name('classes');
+    });
 
     Route::prefix('umum')->name('umum.')->middleware('role:umum')->group(function () {
         Route::get('/', [PublicTestingController::class, 'dashboard'])->name('dashboard');

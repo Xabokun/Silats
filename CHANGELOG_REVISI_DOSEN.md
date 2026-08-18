@@ -49,3 +49,11 @@
 - Tombol Login dan Daftar pada navbar publik dihilangkan.
 - Tombol login hanya tersedia pada bagian body/hero halaman utama.
 - Route registrasi publik `/daftar` dinonaktifkan.
+
+## Revisi v4
+- Seluruh menu user terautentikasi dipindahkan dari navbar atas ke sidebar kiri.
+- Sidebar dibuat responsif untuk desktop dan mobile.
+- Tombol keluar dipindahkan ke bagian bawah sidebar.
+- Prodi mendapat menu **Semua Kelas Praktikum**.
+- Prodi dapat melihat seluruh kelas dari semua laboratorium beserta mata kuliah, kelas, laboratorium, dosen, ruangan, jadwal, jumlah mahasiswa final, jumlah pilihan awal, kapasitas, semester/tahun akademik, dan status kelas.
+- Dashboard Prodi menampilkan ringkasan total kelas praktikum dan kelas aktif.
