@@ -79,6 +79,7 @@
                 <a class="sidebar-link {{ request()->routeIs('admin.classes*')?'active':'' }}" href="{{ route('admin.classes') }}"><span class="sidebar-dot"></span>Jadwal & Kelas</a>
                 <a class="sidebar-link {{ request()->routeIs('admin.registrations*')?'active':'' }}" href="{{ route('admin.registrations') }}"><span class="sidebar-dot"></span>Verifikasi Praktikum</a>
                 <a class="sidebar-link {{ request()->routeIs('admin.letter-types*')?'active':'' }}" href="{{ route('admin.letter-types') }}"><span class="sidebar-dot"></span>Manajemen Surat</a>
+                <a class="sidebar-link {{ request()->routeIs('admin.letter-settings*')?'active':'' }}" href="{{ route('admin.letter-settings') }}"><span class="sidebar-dot"></span>Pengaturan Kop Surat</a>
                 <a class="sidebar-link {{ request()->routeIs('admin.services*')||request()->routeIs('admin.categories*')?'active':'' }}" href="{{ route('admin.services') }}"><span class="sidebar-dot"></span>Jenis Pengujian</a>
             @elseif(auth()->user()->isRole('mahasiswa'))
                 <div class="sidebar-section-title">PRAKTIKUM</div>

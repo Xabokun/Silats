@@ -1,2 +1,109 @@
- <?php $__env->startSection('title','Dashboard Admin'); ?> <?php $__env->startSection('content'); ?><div class="container py-4"><div class="d-flex justify-content-between align-items-center mb-4"><div><h2 class="fw-bold mb-0">Dashboard Admin</h2><p class="text-secondary mb-0">Ringkasan operasional SILATS.</p></div></div><div class="row g-3 mb-4"><?php $__currentLoopData = [['Mahasiswa',$studentCount],['Kelas Aktif',$activeClasses],['Menunggu Verifikasi',$pendingRegistrations],['Pengujian Aktif',$activeTests]]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body"><div class="text-secondary small"><?php echo e($c[0]); ?></div><div class="display-6 fw-bold"><?php echo e($c[1]); ?></div></div></div></div><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></div><div class="row g-4"><div class="col-lg-6"><div class="card border-0 shadow-sm"><div class="card-body"><h5>Jumlah Pengujian per Kategori</h5><canvas id="testChart" height="180"></canvas></div></div></div><div class="col-lg-6"><div class="card border-0 shadow-sm"><div class="card-body"><h5>Pemilihan Kelas Praktikum</h5><canvas id="classChart" height="180"></canvas></div></div></div></div></div><?php $__env->stopSection(); ?> <?php $__env->startPush('scripts'); ?><script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script><script>new Chart(document.getElementById('testChart'),{type:'bar',data:{labels:<?php echo json_encode($testByCategory->pluck('name'), 15, 512) ?>,datasets:[{label:'Jumlah Pengujian',data:<?php echo json_encode($testByCategory->pluck('total'), 15, 512) ?>}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});new Chart(document.getElementById('classChart'),{type:'bar',data:{labels:<?php echo json_encode($classChoices->map(fn($x)=>$x->course->name.' '.$x->class_name), 15, 512) ?>,datasets:[{label:'Pendaftar',data:<?php echo json_encode($classChoices->pluck('registrations_count'), 15, 512) ?>}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});</script><?php $__env->stopPush(); ?>
+<?php $__env->startSection('title', 'Dashboard Admin'); ?>
+<?php $__env->startSection('page_heading', 'Dashboard Admin'); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="container-fluid px-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">Dashboard Admin</h2>
+            <p class="text-secondary mb-0">Ringkasan operasional SILATS.</p>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <?php $__currentLoopData = [
+            ['Mahasiswa', $studentCount],
+            ['Kelas Aktif', $activeClasses],
+            ['Menunggu Verifikasi', $pendingRegistrations],
+            ['Pengujian Aktif', $activeTests]
+        ]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="col-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="text-secondary small"><?php echo e($card[0]); ?></div>
+                        <div class="display-6 fw-bold"><?php echo e($card[1]); ?></div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h5>Jumlah Pengujian per Kategori</h5>
+                    <canvas id="testChart" height="180"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h5>Pemilihan Kelas Praktikum</h5>
+                    <canvas id="classChart" height="180"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php
+    $testChartLabels = $testByCategory->pluck('name')->values();
+    $testChartValues = $testByCategory->pluck('total')->values();
+    $classChartLabels = $classChoices->map(function ($item) {
+        return ($item->course?->name ?? 'Mata Kuliah') . ' ' . $item->class_name;
+    })->values();
+    $classChartValues = $classChoices->pluck('registrations_count')->values();
+?>
+
+<?php $__env->startPush('scripts'); ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+<script>
+const testChartLabels = <?php echo json_encode($testChartLabels, 15, 512) ?>;
+const testChartValues = <?php echo json_encode($testChartValues, 15, 512) ?>;
+const classChartLabels = <?php echo json_encode($classChartLabels, 15, 512) ?>;
+const classChartValues = <?php echo json_encode($classChartValues, 15, 512) ?>;
+
+new Chart(document.getElementById('testChart'), {
+    type: 'bar',
+    data: {
+        labels: testChartLabels,
+        datasets: [{
+            label: 'Jumlah Pengujian',
+            data: testChartValues
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+new Chart(document.getElementById('classChart'), {
+    type: 'bar',
+    data: {
+        labels: classChartLabels,
+        datasets: [{
+            label: 'Pendaftar',
+            data: classChartValues
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+<?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SILATS_Laravel\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

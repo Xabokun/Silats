@@ -47,6 +47,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/jenis-surat', [AdminController::class, 'letterTypes'])->name('letter-types');
         Route::get('/jenis-surat/buat', [AdminController::class, 'createLetterType'])->name('letter-types.create');
         Route::post('/jenis-surat', [AdminController::class, 'storeLetterType'])->name('letter-types.store');
+        Route::get('/jenis-surat/{letterType}/edit', [AdminController::class, 'editLetterType'])->name('letter-types.edit');
+        Route::put('/jenis-surat/{letterType}', [AdminController::class, 'updateLetterType'])->name('letter-types.update');
+        Route::get('/pengaturan-surat', [AdminController::class, 'letterSettings'])->name('letter-settings');
+        Route::put('/pengaturan-surat', [AdminController::class, 'updateLetterSettings'])->name('letter-settings.update');
 
         // Admin dapat menambah kategori dan jenis pengujian secara dinamis.
         Route::get('/jenis-pengujian', [AdminController::class, 'services'])->name('services');
@@ -91,6 +95,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [LetterProcessController::class, 'index'])->name('index');
         Route::get('/buat', [LetterProcessController::class, 'create'])->name('create');
         Route::post('/', [LetterProcessController::class, 'store'])->name('store');
+        Route::get('/{letterRequest}/dokumen', [LetterProcessController::class, 'document'])->name('document');
         Route::get('/{letterRequest}', [LetterProcessController::class, 'show'])->name('show');
         Route::post('/{letterRequest}/proses', [LetterProcessController::class, 'action'])->name('action');
     });
