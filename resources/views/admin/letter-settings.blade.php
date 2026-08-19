@@ -9,39 +9,33 @@
         <div class="col-xl-7">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
-                    <h3 class="mb-1">Identitas Kop Surat</h3>
-                    <p class="text-secondary">Data ini otomatis digunakan pada semua surat resmi yang diterbitkan SILATS.</p>
+                    <h3 class="mb-1">Kop Surat Resmi</h3>
+                    <p class="text-secondary">SILATS menggunakan kop Fakultas Teknik sesuai contoh UIR yang Anda berikan. Anda dapat mengganti gambar kop dari sini.</p>
 
                     <form method="POST" enctype="multipart/form-data" action="{{ route('admin.letter-settings.update') }}">
                         @csrf
                         @method('PUT')
 
                         <div class="mb-3">
-                            <label class="form-label">Nama Universitas / Institusi</label>
-                            <input class="form-control" name="institution_name" required value="{{ old('institution_name', $settings->institution_name ?: 'UNIVERSITAS CONTOH') }}">
+                            <label class="form-label fw-semibold">Gambar Kop Surat Lengkap</label>
+                            <input type="file" class="form-control" name="kop_image" accept=".png,.jpg,.jpeg">
+                            <div class="form-text">Gunakan gambar kop lengkap (logo, nama universitas/fakultas, dan baris alamat). Maksimal 4 MB.</div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nama Fakultas</label>
-                            <input class="form-control" name="faculty_name" required value="{{ old('faculty_name', $settings->faculty_name ?: 'FAKULTAS TEKNIK SIPIL') }}">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Unit / Program Studi / Laboratorium</label>
-                            <input class="form-control" name="unit_name" value="{{ old('unit_name', $settings->unit_name) }}" placeholder="Contoh: PROGRAM STUDI TEKNIK SIPIL">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Alamat</label>
-                            <textarea class="form-control" rows="2" name="address">{{ old('address', $settings->address) }}</textarea>
-                        </div>
+                        @if($settings->header_image_path || file_exists(public_path('images/kop-ft-uir.jpg')))
+                            <div class="border rounded-3 p-2 bg-light mb-4">
+                                <img src="{{ $settings->header_image_path ? asset('storage/'.$settings->header_image_path) : asset('images/kop-ft-uir.jpg') }}" alt="Kop Surat" class="img-fluid" style="width:100%; max-height:190px; object-fit:contain; object-position:left center;">
+                            </div>
+                        @endif
+
                         <div class="row g-3">
-                            <div class="col-md-6"><label class="form-label">Telepon</label><input class="form-control" name="phone" value="{{ old('phone', $settings->phone) }}"></div>
-                            <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-control" name="email" value="{{ old('email', $settings->email) }}"></div>
-                            <div class="col-md-6"><label class="form-label">Website</label><input class="form-control" name="website" value="{{ old('website', $settings->website) }}"></div>
-                            <div class="col-md-6"><label class="form-label">Kota Penerbitan</label><input class="form-control" name="city" required value="{{ old('city', $settings->city ?: 'Palu') }}"></div>
-                        </div>
-                        <div class="mt-3">
-                            <label class="form-label">Logo Kop</label>
-                            <input type="file" class="form-control" name="logo" accept=".png,.jpg,.jpeg">
-                            <div class="form-text">PNG/JPG maksimal 2 MB. Jika tidak diunggah, surat menampilkan placeholder identitas.</div>
+                            <div class="col-md-6"><label class="form-label">Nama Universitas / Institusi</label><input class="form-control" name="institution_name" required value="{{ old('institution_name', $settings->institution_name ?: 'UNIVERSITAS ISLAM RIAU') }}"></div>
+                            <div class="col-md-6"><label class="form-label">Nama Fakultas</label><input class="form-control" name="faculty_name" required value="{{ old('faculty_name', $settings->faculty_name ?: 'FAKULTAS TEKNIK') }}"></div>
+                            <div class="col-md-6"><label class="form-label">Unit / Program Studi / Laboratorium</label><input class="form-control" name="unit_name" value="{{ old('unit_name', $settings->unit_name) }}"></div>
+                            <div class="col-md-6"><label class="form-label">Kota Penerbitan</label><input class="form-control" name="city" required value="{{ old('city', $settings->city ?: 'Pekanbaru') }}"></div>
+                            <div class="col-12"><label class="form-label">Alamat</label><textarea class="form-control" rows="2" name="address">{{ old('address', $settings->address) }}</textarea></div>
+                            <div class="col-md-4"><label class="form-label">Telepon</label><input class="form-control" name="phone" value="{{ old('phone', $settings->phone) }}"></div>
+                            <div class="col-md-4"><label class="form-label">Email</label><input type="email" class="form-control" name="email" value="{{ old('email', $settings->email) }}"></div>
+                            <div class="col-md-4"><label class="form-label">Website</label><input class="form-control" name="website" value="{{ old('website', $settings->website) }}"></div>
                         </div>
                         <button class="btn btn-primary mt-4">Simpan Pengaturan Kop</button>
                     </form>
@@ -51,19 +45,13 @@
 
         <div class="col-xl-5">
             <div class="card border-0 shadow-sm">
-                <div class="card-body p-4 text-center">
-                    <h5>Preview Identitas Kop</h5>
-                    @if($settings->logo_path)
-                        <img src="{{ asset('storage/'.$settings->logo_path) }}" alt="Logo" style="max-height:90px" class="my-3">
-                    @else
-                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle border my-3" style="width:80px;height:80px;font-weight:700">FTS</div>
-                    @endif
-                    <div class="fw-bold fs-5">{{ $settings->institution_name ?: 'UNIVERSITAS CONTOH' }}</div>
-                    <div class="fw-bold">{{ $settings->faculty_name ?: 'FAKULTAS TEKNIK SIPIL' }}</div>
-                    @if($settings->unit_name)<div>{{ $settings->unit_name }}</div>@endif
-                    <div class="small text-secondary mt-2">{{ $settings->address }}</div>
-                    <div class="small text-secondary">{{ collect([$settings->phone, $settings->email, $settings->website])->filter()->join(' • ') }}</div>
-                    <hr class="border-2 border-dark opacity-100">
+                <div class="card-body p-4">
+                    <h5>Preview Format Surat</h5>
+                    <div class="small text-secondary mb-3">Kop ditempatkan di bagian paling atas halaman A4, lalu tanggal Masehi dan Hijriyah ditampilkan dua baris seperti contoh surat UIR.</div>
+                    <div class="border rounded-3 p-2 bg-light">
+                        <img src="{{ $settings->header_image_path ? asset('storage/'.$settings->header_image_path) : asset('images/kop-ft-uir.jpg') }}" class="img-fluid" alt="Preview kop surat">
+                    </div>
+                    <div class="small text-secondary mt-3">Tanggal contoh: <strong>{{ $settings->city ?: 'Pekanbaru' }}, {{ now()->translatedFormat('d F Y') }}</strong> dan tanggal Hijriyah di baris berikutnya.</div>
                 </div>
             </div>
         </div>

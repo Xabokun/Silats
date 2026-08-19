@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('letterhead_settings', function (Blueprint $table) {
+        Schema::create('letterhead_settings', function (Blueprint $table) { $table->engine = 'InnoDB';
             $table->id();
             $table->string('institution_name')->default('UNIVERSITAS CONTOH');
             $table->string('faculty_name')->default('FAKULTAS TEKNIK SIPIL');

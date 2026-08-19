@@ -46,14 +46,14 @@ class DatabaseSeeder extends Seeder
         $admin = User::create(['name' => 'Admin SILATS', 'email' => 'admin@silats.test', 'role' => 'admin', 'password' => 'password']);
         $student = User::create(['npm' => '2210001', 'name' => 'Budi Mahasiswa', 'email' => 'mahasiswa@silats.test', 'role' => 'mahasiswa', 'password' => 'password']);
         $student2 = User::create(['npm' => '2210002', 'name' => 'Siti Mahasiswa', 'email' => 'mahasiswa2@silats.test', 'role' => 'mahasiswa', 'password' => 'password']);
-        $dosen = User::create(['name' => 'Dr. Ahmad, S.T., M.T.', 'email' => 'dosen@silats.test', 'role' => 'dosen', 'password' => 'password']);
+        $dosen = User::create(['name' => 'Dr. Ahmad, S.T., M.T.', 'email' => 'dosen@silats.test', 'nidn' => '0000000001', 'expertise' => 'Struktur dan Teknologi Beton', 'role' => 'dosen', 'password' => 'password']);
         $labor = User::create(['name' => 'Laboran Beton', 'email' => 'labor@silats.test', 'role' => 'tenaga_labor', 'laboratory_id' => $beton->id, 'password' => 'password']);
         $kalab = User::create(['name' => 'Kepala Lab Beton', 'email' => 'kalab@silats.test', 'role' => 'kepala_labor', 'laboratory_id' => $beton->id, 'password' => 'password']);
         User::create(['name' => 'Laboran Tanah', 'email' => 'labor.tanah@silats.test', 'role' => 'tenaga_labor', 'laboratory_id' => $tanah->id, 'password' => 'password']);
         User::create(['name' => 'Kepala Lab Tanah', 'email' => 'kalab.tanah@silats.test', 'role' => 'kepala_labor', 'laboratory_id' => $tanah->id, 'password' => 'password']);
         User::create(['name' => 'Laboran Air', 'email' => 'labor.air@silats.test', 'role' => 'tenaga_labor', 'laboratory_id' => $air->id, 'password' => 'password']);
         User::create(['name' => 'Kepala Lab Air', 'email' => 'kalab.air@silats.test', 'role' => 'kepala_labor', 'laboratory_id' => $air->id, 'password' => 'password']);
-        User::create(['name' => 'Program Studi Teknik Sipil', 'email' => 'prodi@silats.test', 'role' => 'prodi', 'password' => 'password']);
+        User::create(['name' => 'Program Studi Teknik Sipil', 'email' => 'prodi@silats.test', 'role' => 'prodi', 'position_title' => 'Ketua Program Studi Teknik Sipil', 'position_start_date' => '2026-01-01', 'position_end_date' => '2029-01-01', 'password' => 'password']);
         $umum = User::create(['name' => 'Andi Masyarakat', 'email' => 'umum@silats.test', 'phone' => '081234567890', 'role' => 'umum', 'password' => 'password']);
 
         LetterheadSetting::create([
@@ -64,7 +64,8 @@ class DatabaseSeeder extends Seeder
             'phone' => '(0451) 000000',
             'email' => 'tekniksipil@kampus.ac.id',
             'website' => 'www.kampus.ac.id',
-            'city' => 'Palu',
+            'city' => 'Pekanbaru',
+            'header_image_path' => 'images/kop-ft-uir.jpg',
         ]);
 
         $mkBeton = Course::create(['code' => 'TS-BTN', 'name' => 'Praktikum Teknologi Beton', 'credits' => 1]);
@@ -189,7 +190,7 @@ class DatabaseSeeder extends Seeder
             'number_format' => '{seq}/{code}/{month_roman}/{year}',
             'signatory_name' => 'Dr. Ahmad, S.T., M.T.',
             'signatory_position' => 'Kepala Laboratorium',
-            'signatory_identifier' => 'NIP. 198000000000000001',
+            'signatory_identifier' => 'NIDN. 0000000001',
             'body_template' => "Dengan hormat,\n\nDengan ini menerangkan bahwa:\n\nNama : {{nama}}\nNPM : {{npm}}\nSemester : {{field:semester}}\n\ntelah mengikuti kegiatan {{field:nama_praktikum}} pada {{laboratorium}}. Surat ini diterbitkan untuk keperluan {{field:keperluan}}.\n\nDemikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.",
             'created_by' => $admin->id,
         ]);
@@ -233,7 +234,7 @@ class DatabaseSeeder extends Seeder
             'number_format' => '{seq}/{code}/{month_roman}/{year}',
             'signatory_name' => 'Ketua Program Studi Teknik Sipil',
             'signatory_position' => 'Ketua Program Studi Teknik Sipil',
-            'signatory_identifier' => 'NIP. 198000000000000002',
+            'signatory_identifier' => 'NIDN. 0000000002',
             'body_template' => "Dengan hormat,\n\nSaya {{nama}} mengajukan permohonan terkait {{field:keperluan}} dengan tujuan {{field:tujuan}}.\n\nDemikian permohonan ini disampaikan untuk dapat diproses sebagaimana mestinya.",
             'created_by' => $admin->id,
         ]);

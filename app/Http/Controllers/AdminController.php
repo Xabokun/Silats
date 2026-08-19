@@ -34,7 +34,7 @@ class AdminController extends Controller
     public function createUser()
     {
         $laboratories = Laboratory::orderBy('name')->get();
-        return view('admin.user-form', compact('laboratories'));
+        return view('admin.user-form', ['laboratories' => $laboratories, 'user' => new User]);
     }
 
     public function storeUser(Request $request)
@@ -43,8 +43,13 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'npm' => 'nullable|string|max:50|unique:users,npm',
+            'nidn' => 'nullable|string|max:30|unique:users,nidn',
             'phone' => 'nullable|string|max:30',
             'address' => 'nullable|string|max:1000',
+            'expertise' => 'nullable|string|max:2000',
+            'position_title' => 'nullable|string|max:255',
+            'position_start_date' => 'nullable|date',
+            'position_end_date' => 'nullable|date|after_or_equal:position_start_date',
             'role' => 'required|in:admin,mahasiswa,dosen,tenaga_labor,kepala_labor,prodi,umum',
             'laboratory_id' => 'nullable|exists:laboratories,id',
             'password' => 'required|string|min:6|confirmed',
@@ -52,6 +57,18 @@ class AdminController extends Controller
 
         if ($data['role'] === 'mahasiswa' && empty($data['npm'])) {
             return back()->withErrors(['npm' => 'NPM wajib diisi untuk akun mahasiswa.'])->withInput();
+        }
+        if ($data['role'] === 'dosen' && empty($data['nidn'])) {
+            return back()->withErrors(['nidn' => 'NIDN wajib diisi untuk akun dosen.'])->withInput();
+        }
+        if ($data['role'] === 'dosen' && empty($data['expertise'])) {
+            return back()->withErrors(['expertise' => 'Kepakaran wajib diisi untuk akun dosen.'])->withInput();
+        }
+        if ($data['role'] === 'prodi' && empty($data['position_title'])) {
+            return back()->withErrors(['position_title' => 'Jabatan Prodi wajib diisi untuk akun Program Studi.'])->withInput();
+        }
+        if ($data['role'] === 'prodi' && empty($data['position_start_date'])) {
+            return back()->withErrors(['position_start_date' => 'Tanggal mulai jabatan wajib diisi untuk akun Program Studi.'])->withInput();
         }
         if (in_array($data['role'], ['tenaga_labor', 'kepala_labor'], true) && empty($data['laboratory_id'])) {
             return back()->withErrors(['laboratory_id' => 'Laboratorium wajib dipilih untuk Tenaga Labor/Kepala Labor.'])->withInput();
@@ -63,9 +80,94 @@ class AdminController extends Controller
         if ($data['role'] !== 'mahasiswa') {
             $data['npm'] = null;
         }
+        if ($data['role'] !== 'dosen') {
+            $data['nidn'] = $data['role'] === 'prodi' ? ($data['nidn'] ?? null) : null;
+            $data['expertise'] = null;
+        }
+        if (! in_array($data['role'], ['dosen', 'prodi'], true)) {
+            $data['position_title'] = null;
+            $data['position_start_date'] = null;
+            $data['position_end_date'] = null;
+        }
+        if ($data['role'] === 'dosen') {
+            $data['phone'] = null;
+            $data['address'] = null;
+        }
 
         User::create($data);
         return redirect()->route('admin.users')->with('success', 'Akun baru berhasil dibuat oleh Admin.');
+    }
+
+    public function editUser(User $user)
+    {
+        $laboratories = Laboratory::orderBy('name')->get();
+        return view('admin.user-form', compact('user', 'laboratories'));
+    }
+
+    public function updateUser(Request $request, User $user)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required','email','max:255', Rule::unique('users','email')->ignore($user->id)],
+            'npm' => ['nullable','string','max:50', Rule::unique('users','npm')->ignore($user->id)],
+            'nidn' => ['nullable','string','max:30', Rule::unique('users','nidn')->ignore($user->id)],
+            'phone' => 'nullable|string|max:30',
+            'address' => 'nullable|string|max:1000',
+            'expertise' => 'nullable|string|max:2000',
+            'position_title' => 'nullable|string|max:255',
+            'position_start_date' => 'nullable|date',
+            'position_end_date' => 'nullable|date|after_or_equal:position_start_date',
+            'role' => 'required|in:admin,mahasiswa,dosen,tenaga_labor,kepala_labor,prodi,umum',
+            'laboratory_id' => 'nullable|exists:laboratories,id',
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
+
+        if ($data['role'] === 'mahasiswa' && empty($data['npm'])) {
+            return back()->withErrors(['npm' => 'NPM wajib diisi untuk akun mahasiswa.'])->withInput();
+        }
+        if ($data['role'] === 'dosen' && empty($data['nidn'])) {
+            return back()->withErrors(['nidn' => 'NIDN wajib diisi untuk akun dosen.'])->withInput();
+        }
+        if ($data['role'] === 'dosen' && empty($data['expertise'])) {
+            return back()->withErrors(['expertise' => 'Kepakaran wajib diisi untuk akun dosen.'])->withInput();
+        }
+        if ($data['role'] === 'prodi' && empty($data['position_title'])) {
+            return back()->withErrors(['position_title' => 'Jabatan Prodi wajib diisi untuk akun Program Studi.'])->withInput();
+        }
+        if ($data['role'] === 'prodi' && empty($data['position_start_date'])) {
+            return back()->withErrors(['position_start_date' => 'Tanggal mulai jabatan wajib diisi untuk akun Program Studi.'])->withInput();
+        }
+        if (in_array($data['role'], ['tenaga_labor', 'kepala_labor'], true) && empty($data['laboratory_id'])) {
+            return back()->withErrors(['laboratory_id' => 'Laboratorium wajib dipilih untuk Tenaga Labor/Kepala Lab.'])->withInput();
+        }
+
+        if (! in_array($data['role'], ['tenaga_labor', 'kepala_labor'], true)) {
+            $data['laboratory_id'] = null;
+        }
+        if ($data['role'] !== 'mahasiswa') {
+            $data['npm'] = null;
+        }
+        if ($data['role'] !== 'dosen') {
+            $data['nidn'] = $data['role'] === 'prodi' ? ($data['nidn'] ?? null) : null;
+            $data['expertise'] = null;
+        }
+        if (! in_array($data['role'], ['dosen', 'prodi'], true)) {
+            $data['position_title'] = null;
+            $data['position_start_date'] = null;
+            $data['position_end_date'] = null;
+        }
+        if ($data['role'] === 'dosen' && ($data['phone'] ?? null)) {
+            $data['phone'] = null;
+        }
+        if ($data['role'] === 'dosen') {
+            $data['address'] = null;
+        }
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        $user->update($data);
+        return redirect()->route('admin.users')->with('success', 'Data akun berhasil diperbarui.');
     }
 
     public function dashboard()
@@ -376,6 +478,7 @@ class AdminController extends Controller
             'website' => 'nullable|string|max:255',
             'city' => 'required|string|max:100',
             'logo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'kop_image' => 'nullable|image|mimes:png,jpg,jpeg|max:4096',
         ]);
 
         $settings = LetterheadSetting::first() ?? new LetterheadSetting;
@@ -387,6 +490,14 @@ class AdminController extends Controller
             $data['logo_path'] = $request->file('logo')->store('letterhead', 'public');
         }
         unset($data['logo']);
+
+        if ($request->hasFile('kop_image')) {
+            if ($settings->header_image_path && ! str_starts_with($settings->header_image_path, 'images/')) {
+                Storage::disk('public')->delete($settings->header_image_path);
+            }
+            $data['header_image_path'] = $request->file('kop_image')->store('letterhead', 'public');
+        }
+        unset($data['kop_image']);
 
         $settings->fill($data)->save();
         return back()->with('success', 'Pengaturan kop surat berhasil disimpan.');

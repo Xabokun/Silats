@@ -133,3 +133,25 @@ Semua password: `password`
 - Grafik: Chart.js via CDN.
 - Upload kop/lampiran menggunakan disk `public`; jalankan `php artisan storage:link`.
 - Folder `vendor` tidak disertakan; jalankan `composer install` setelah ekstraksi.
+
+## v4.2.1 - Foreign Key / InnoDB Fix
+Jika sebelumnya migration gagal dengan errno 150 pada requirement_submissions, gunakan versi ini dan jalankan:
+
+```bash
+php artisan optimize:clear
+php artisan migrate:fresh --seed
+php artisan storage:link
+php artisan serve
+```
+
+Migration tabel praktikum dan submission sekarang menggunakan BIGINT UNSIGNED eksplisit dan engine InnoDB agar foreign key kompatibel dengan MySQL/MariaDB.
+
+
+## Revisi Akun & Surat (v4.3)
+- Admin dapat edit akun, mengganti role, email, dan reset password.
+- Dosen menggunakan NIDN dan Kepakaran; No. HP/Alamat tidak ditampilkan pada form Dosen.
+- Jabatan Prodi memiliki periode mulai/selesai.
+- Penugasan Kepala Labor dapat dipindahkan laboratoriumnya oleh Admin.
+- Sidebar desktop fleksibel mengikuti nama profil.
+- Kop surat default menggunakan kop Fakultas Teknik UIR dari dokumen acuan yang diberikan.
+- Surat resmi menampilkan tanggal Masehi + Hijriyah dan layout A4 bergaya surat UIR.

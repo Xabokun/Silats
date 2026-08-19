@@ -86,11 +86,11 @@ class LetterProcessController extends Controller
             $name = 'letter_field_' . $field->id;
             $rules = [$field->is_required ? 'required' : 'nullable'];
 
-            $rules[] = match ($field->input_type) {
-                'date' => 'date',
-                'number' => 'numeric',
-                default => 'string|max:5000',
-            };
+            $rules = array_merge($rules, match ($field->input_type) {
+                'date' => ['date'],
+                'number' => ['numeric'],
+                default => ['string', 'max:5000'],
+            });
 
             $fieldRules[$name] = $rules;
         }
@@ -238,10 +238,11 @@ class LetterProcessController extends Controller
         ]);
 
         $settings = LetterheadSetting::first() ?? new LetterheadSetting([
-            'institution_name' => 'UNIVERSITAS CONTOH',
-            'faculty_name' => 'FAKULTAS TEKNIK SIPIL',
-            'unit_name' => 'SISTEM INFORMASI LABORATORIUM TEKNIK SIPIL',
-            'city' => 'Palu',
+            'institution_name' => 'UNIVERSITAS ISLAM RIAU',
+            'faculty_name' => 'FAKULTAS TEKNIK',
+            'unit_name' => null,
+            'city' => 'Pekanbaru',
+            'header_image_path' => null,
         ]);
 
         $isOfficial = $letterRequest->status === 'completed' && filled($letterRequest->official_number);
@@ -249,7 +250,17 @@ class LetterProcessController extends Controller
             ? $letterRequest->generated_body
             : $this->documents->renderBody($letterRequest);
 
-        return view('surat.document', compact('letterRequest', 'settings', 'isOfficial', 'body'));
+        $headerImageUrl = $settings->header_image_path
+            ? asset('storage/' . $settings->header_image_path)
+            : asset('images/kop-ft-uir.jpg');
+        $date = $letterRequest->letter_date ?? now();
+        $gregorianDate = $date->translatedFormat('d F Y');
+        $hijriDate = $this->documents->formatHijriDate($date, $settings->city ?: 'Pekanbaru');
+
+        return view('surat.document', compact(
+            'letterRequest', 'settings', 'isOfficial', 'body', 'headerImageUrl',
+            'gregorianDate', 'hijriDate'
+        ));
     }
 
     private function publish(LetterRequest $letter): void

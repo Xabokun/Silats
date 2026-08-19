@@ -151,7 +151,7 @@
                         <h4>4. Penandatangan</h4>
                         <div class="mb-3"><label class="form-label">Nama</label><input class="form-control" name="signatory_name" required value="{{ old('signatory_name', $type->signatory_name) }}" placeholder="Dr. Ahmad, S.T., M.T."></div>
                         <div class="mb-3"><label class="form-label">Jabatan</label><input class="form-control" name="signatory_position" required value="{{ old('signatory_position', $type->signatory_position) }}" placeholder="Kepala Laboratorium"></div>
-                        <div><label class="form-label">NIP / Identitas</label><input class="form-control" name="signatory_identifier" value="{{ old('signatory_identifier', $type->signatory_identifier) }}" placeholder="NIP. 19xxxxxxxx"></div>
+                        <div><label class="form-label">NIDN</label><input class="form-control" name="signatory_identifier" value="{{ old('signatory_identifier', $type->signatory_identifier) }}" placeholder="NIDN. 0000000000"></div>
                     </div>
                 </div>
 

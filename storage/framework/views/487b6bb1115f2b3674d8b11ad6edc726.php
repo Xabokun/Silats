@@ -66,7 +66,7 @@
         <div class="sidebar-profile">
             <div class="sidebar-avatar"><?php echo e(strtoupper(substr(auth()->user()->name,0,1))); ?></div>
             <div class="min-w-0">
-                <div class="fw-semibold text-white text-truncate"><?php echo e(auth()->user()->name); ?></div>
+                <div class="fw-semibold text-white sidebar-profile-name"><?php echo e(auth()->user()->name); ?></div>
                 <small><?php echo e($roleLabels[auth()->user()->role]??auth()->user()->role); ?></small>
             </div>
         </div>

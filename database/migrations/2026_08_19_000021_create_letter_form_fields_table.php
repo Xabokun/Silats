@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('letter_form_fields', function (Blueprint $table) {
+        Schema::create('letter_form_fields', function (Blueprint $table) { $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId('letter_type_id')->constrained()->cascadeOnDelete();
             $table->unsignedSmallInteger('sort_order')->default(1);

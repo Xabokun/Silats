@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('letter_field_values', function (Blueprint $table) {
+        Schema::create('letter_field_values', function (Blueprint $table) { $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId('letter_request_id')->constrained()->cascadeOnDelete();
             $table->foreignId('letter_form_field_id')->nullable()->constrained()->nullOnDelete();

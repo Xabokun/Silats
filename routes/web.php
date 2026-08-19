@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/akun', [AdminController::class, 'users'])->name('users');
         Route::get('/akun/buat', [AdminController::class, 'createUser'])->name('users.create');
         Route::post('/akun', [AdminController::class, 'storeUser'])->name('users.store');
+        Route::get('/akun/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+        Route::put('/akun/{user}', [AdminController::class, 'updateUser'])->name('users.update');
 
         Route::get('/kelas', [AdminController::class, 'classes'])->name('classes');
         Route::get('/kelas/buat', [AdminController::class, 'createClass'])->name('classes.create');
