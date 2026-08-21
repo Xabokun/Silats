@@ -29,7 +29,7 @@
                                 <label class="form-label">Role Sistem</label>
                                 <select class="form-select" name="role" id="role" required>
                                     <option value="">Pilih role</option>
-                                    <?php $__currentLoopData = ['admin'=>'Admin','mahasiswa'=>'Mahasiswa','dosen'=>'Dosen','tenaga_labor'=>'Tenaga Labor','kepala_labor'=>'Kepala Labor','prodi'=>'Program Studi','umum'=>'Masyarakat']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value=>$label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $__currentLoopData = ['admin'=>'Admin','mahasiswa'=>'Mahasiswa','dosen'=>'Dosen','tenaga_labor'=>'Tenaga Labor','kepala_labor'=>'Kepala Labor','prodi'=>'Ka/Sekretaris Program Studi','umum'=>'Masyarakat']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value=>$label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <option value="<?php echo e($value); ?>" <?php if($roleValue===$value): echo 'selected'; endif; ?>><?php echo e($label); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>

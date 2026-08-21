@@ -17,7 +17,7 @@
         'dosen'=>'Dosen',
         'tenaga_labor'=>'Tenaga Labor',
         'kepala_labor'=>'Kepala Labor',
-        'prodi'=>'Program Studi',
+        'prodi'=>'Ka/Sekretaris Program Studi',
         'umum'=>'Masyarakat'
     ];
 ?>
@@ -77,6 +77,7 @@
                 <a class="sidebar-link <?php echo e(request()->routeIs('admin.dashboard')?'active':''); ?>" href="<?php echo e(route('admin.dashboard')); ?>"><span class="sidebar-dot"></span>Dashboard</a>
                 <a class="sidebar-link <?php echo e(request()->routeIs('admin.users*')?'active':''); ?>" href="<?php echo e(route('admin.users')); ?>"><span class="sidebar-dot"></span>Manajemen Akun</a>
                 <a class="sidebar-link <?php echo e(request()->routeIs('admin.classes*')?'active':''); ?>" href="<?php echo e(route('admin.classes')); ?>"><span class="sidebar-dot"></span>Jadwal & Kelas</a>
+                <a class="sidebar-link <?php echo e(request()->routeIs('admin.class-types*')?'active':''); ?>" href="<?php echo e(route('admin.class-types')); ?>"><span class="sidebar-dot"></span>Master Tipe Kelas</a>
                 <a class="sidebar-link <?php echo e(request()->routeIs('admin.registrations*')?'active':''); ?>" href="<?php echo e(route('admin.registrations')); ?>"><span class="sidebar-dot"></span>Verifikasi Praktikum</a>
                 <a class="sidebar-link <?php echo e(request()->routeIs('admin.letter-types*')?'active':''); ?>" href="<?php echo e(route('admin.letter-types')); ?>"><span class="sidebar-dot"></span>Manajemen Surat</a>
                 <a class="sidebar-link <?php echo e(request()->routeIs('admin.letter-settings*')?'active':''); ?>" href="<?php echo e(route('admin.letter-settings')); ?>"><span class="sidebar-dot"></span>Pengaturan Kop Surat</a>

@@ -47,8 +47,9 @@ class LetterProcessController extends Controller
         }
 
         $requests = $query->latest()->get();
+        $pendingLetters = (clone $query)->where('status', 'in_process')->latest()->get();
 
-        return view('surat.index', compact('requests'));
+        return view('surat.index', compact('requests', 'pendingLetters'));
     }
 
     public function create()
@@ -86,11 +87,11 @@ class LetterProcessController extends Controller
             $name = 'letter_field_' . $field->id;
             $rules = [$field->is_required ? 'required' : 'nullable'];
 
-            $rules = array_merge($rules, match ($field->input_type) {
-                'date' => ['date'],
-                'number' => ['numeric'],
-                default => ['string', 'max:5000'],
-            });
+            $rules[] = match ($field->input_type) {
+                'date' => 'date',
+                'number' => 'numeric',
+                default => 'string|max:5000',
+            };
 
             $fieldRules[$name] = $rules;
         }
@@ -196,7 +197,7 @@ class LetterProcessController extends Controller
             ->firstWhere('step_order', $letterRequest->current_step_order);
 
         abort_unless(
-            $current && $current->role === $request->user()->role,
+            $current && ($current->role === $request->user()->role || $request->user()->isRole('admin')),
             403,
             'Surat belum berada pada tahapan role Anda.'
         );

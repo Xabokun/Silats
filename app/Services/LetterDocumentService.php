@@ -108,7 +108,7 @@ class LetterDocumentService
 
     public function defaultTemplate(): string
     {
-        return "Dengan hormat,\n\nDengan ini menerangkan bahwa:\n\nNama : {{nama}}\nNPM : {{npm}}\n\ntelah mengajukan keperluan surat terkait {{perihal}}.\n\nDemikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.";
+        return "Dengan hormat,\n\nDengan ini menerangkan bahwa:\n\nNama        : {{nama}}\nNPM         : {{npm}}\nPerihal     : {{perihal}}\n\ntelah mengajukan keperluan surat terkait {{perihal}}.\n\nDemikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.";
     }
 
     private function romanMonth(int $month): string

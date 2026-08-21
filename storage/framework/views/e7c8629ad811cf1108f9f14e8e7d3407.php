@@ -3,26 +3,53 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container-fluid px-0">
-    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
             <h2 class="fw-bold mb-1">Pengurusan Surat</h2>
-            <p class="text-secondary mb-0">Pantau posisi workflow, preview draft, dan buka surat resmi setelah selesai.</p>
+            <p class="text-secondary mb-0">Pantau posisi workflow, dokumen draft, dan surat resmi yang telah diterbitkan.</p>
         </div>
         <a class="btn btn-primary" href="<?php echo e(route('surat.create')); ?>">+ Ajukan Surat</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="small text-secondary text-uppercase fw-semibold">Total Permohonan</div>
+                    <div class="display-6 fw-bold mt-2"><?php echo e($requests->count()); ?></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="small text-secondary text-uppercase fw-semibold">Dalam Proses</div>
+                    <div class="display-6 fw-bold mt-2"><?php echo e($requests->where('status', 'in_process')->count()); ?></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="small text-secondary text-uppercase fw-semibold">Selesai</div>
+                    <div class="display-6 fw-bold mt-2"><?php echo e($requests->where('status', 'completed')->count()); ?></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead>
+                <thead class="table-light">
                     <tr>
-                        <th>Nomor</th>
+                        <th class="ps-4">Nomor</th>
                         <th>Jenis</th>
                         <th>Pemohon</th>
                         <th>Laboratorium</th>
                         <th>Status</th>
                         <th>Posisi</th>
-                        <th class="text-end">Aksi</th>
+                        <th class="text-end pe-4">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,7 +58,7 @@
                         $step = $letter->letterType->workflowSteps->firstWhere('step_order', $letter->current_step_order);
                     ?>
                     <tr>
-                        <td>
+                        <td class="ps-4">
                             <div class="fw-semibold"><?php echo e($letter->official_number ?: $letter->request_number); ?></div>
                             <?php if($letter->official_number): ?><div class="small text-secondary">Ref: <?php echo e($letter->request_number); ?></div><?php endif; ?>
                         </td>
@@ -45,7 +72,7 @@
                             </span>
                         </td>
                         <td><?php echo e($letter->status === 'completed' ? 'Surat resmi terbit' : ($letter->status === 'rejected' ? 'Pengajuan ditolak' : ($step?->label ?? '-'))); ?></td>
-                        <td class="text-end text-nowrap">
+                        <td class="text-end text-nowrap pe-4">
                             <a class="btn btn-sm btn-outline-secondary" target="_blank" href="<?php echo e(route('surat.document', $letter)); ?>"><?php echo e($letter->status === 'completed' ? 'Surat' : 'Draft'); ?></a>
                             <a class="btn btn-sm btn-outline-primary" href="<?php echo e(route('surat.show', $letter)); ?>">Tracking</a>
                         </td>

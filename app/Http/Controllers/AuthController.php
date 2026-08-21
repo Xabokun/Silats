@@ -35,6 +35,12 @@ class AuthController extends Controller
                 ->onlyInput('login');
         }
 
+        if ($user->role === 'tenaga_labor') {
+            return back()
+                ->withErrors(['login' => 'Akun laboran tidak dapat digunakan untuk login pada sistem ini.'])
+                ->onlyInput('login');
+        }
+
         Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 

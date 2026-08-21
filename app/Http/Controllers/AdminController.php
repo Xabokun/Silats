@@ -11,10 +11,12 @@ use App\Models\{
     LetterheadSetting,
     Laboratory,
     PracticumClass,
+    PracticumClassType,
     PracticumRegistration,
     TestingCategory,
     TestingRequest,
     TestingService,
+    TestingWorkflowStep,
     User
 };
 use Illuminate\Http\Request;
@@ -98,6 +100,64 @@ class AdminController extends Controller
         return redirect()->route('admin.users')->with('success', 'Akun baru berhasil dibuat oleh Admin.');
     }
 
+    public function destroyUser(User $user)
+    {
+        $user->delete();
+        return back()->with('success', 'Akun berhasil dihapus.');
+    }
+
+    public function courses()
+    {
+        $courses = Course::orderBy('name')->get();
+        return view('admin.courses', compact('courses'));
+    }
+
+    public function storeCourse(Request $request)
+    {
+        Course::create($request->validate([
+            'code'=>'required|string|max:50|unique:courses,code',
+            'name'=>'required|string|max:255',
+            'credits'=>'nullable|integer',
+            'description'=>'nullable|string'
+        ]));
+        return back()->with('success','Mata kuliah berhasil ditambahkan.');
+    }
+
+    public function destroyCourse(Course $course)
+    {
+        $course->delete();
+        return back()->with('success','Mata kuliah berhasil dihapus.');
+    }
+
+    public function storeLaboratory(Request $request)
+    {
+        Laboratory::create($request->validate([
+            'code'=>'nullable|string|max:50',
+            'name'=>'required|string|max:255',
+            'description'=>'nullable|string',
+            'address'=>'nullable|string'
+        ]));
+        return back()->with('success','Laboratorium berhasil ditambahkan.');
+    }
+
+    public function destroyLaboratory(Laboratory $laboratory)
+    {
+        $laboratory->delete();
+        return back()->with('success','Laboratorium berhasil dihapus.');
+    }
+
+    public function verifyClass(PracticumClass $class)
+    {
+        $class->update(['is_verified'=>true]);
+        return back()->with('success','Kelas berhasil diverifikasi.');
+    }
+
+    public function destroyClass(PracticumClass $class)
+    {
+        $class->delete();
+        return back()->with('success','Kelas berhasil dihapus.');
+    }
+
     public function editUser(User $user)
     {
         $laboratories = Laboratory::orderBy('name')->get();
@@ -132,10 +192,10 @@ class AdminController extends Controller
             return back()->withErrors(['expertise' => 'Kepakaran wajib diisi untuk akun dosen.'])->withInput();
         }
         if ($data['role'] === 'prodi' && empty($data['position_title'])) {
-            return back()->withErrors(['position_title' => 'Jabatan Prodi wajib diisi untuk akun Program Studi.'])->withInput();
+            return back()->withErrors(['position_title' => 'Jabatan Ka/Sekretaris Program Studi wajib diisi.'])->withInput();
         }
         if ($data['role'] === 'prodi' && empty($data['position_start_date'])) {
-            return back()->withErrors(['position_start_date' => 'Tanggal mulai jabatan wajib diisi untuk akun Program Studi.'])->withInput();
+            return back()->withErrors(['position_start_date' => 'Tanggal mulai jabatan Ka/Sekretaris Program Studi wajib diisi.'])->withInput();
         }
         if (in_array($data['role'], ['tenaga_labor', 'kepala_labor'], true) && empty($data['laboratory_id'])) {
             return back()->withErrors(['laboratory_id' => 'Laboratorium wajib dipilih untuk Tenaga Labor/Kepala Lab.'])->withInput();
@@ -191,9 +251,34 @@ class AdminController extends Controller
         ]);
     }
 
+    public function classTypes()
+    {
+        $classTypes = PracticumClassType::orderBy('name')->get();
+        return view('admin.class-types', compact('classTypes'));
+    }
+
+    public function storeClassType(Request $request)
+    {
+        $data = $request->validate([
+            'code' => 'required|string|max:20|unique:practicum_class_types,code',
+            'name' => 'required|string|max:100',
+            'description' => 'nullable|string|max:500',
+        ]);
+
+        PracticumClassType::create($data);
+
+        return redirect()->route('admin.class-types')->with('success', 'Tipe kelas berhasil ditambahkan.');
+    }
+
+    public function destroyClassType(PracticumClassType $classType)
+    {
+        $classType->delete();
+        return redirect()->route('admin.class-types')->with('success', 'Tipe kelas berhasil dihapus.');
+    }
+
     public function classes()
     {
-        $classes = PracticumClass::with(['course', 'laboratory', 'lecturer'])
+        $classes = PracticumClass::with(['course', 'laboratory', 'lecturer', 'classType'])
             ->withCount(['registrations', 'finalRegistrations'])
             ->orderBy('day')
             ->get();
@@ -237,6 +322,7 @@ class AdminController extends Controller
             'course_id' => 'required|exists:courses,id',
             'laboratory_id' => 'required|exists:laboratories,id',
             'lecturer_id' => 'nullable|exists:users,id',
+            'class_type_id' => 'nullable|exists:practicum_class_types,id',
             'class_name' => 'required|string|max:20',
             'room' => 'required|string|max:100',
             'day' => 'required|string|max:20',
@@ -537,4 +623,38 @@ class AdminController extends Controller
         TestingService::create($data);
         return back()->with('success', 'Jenis pengujian berhasil ditambahkan.');
     }
+    public function testingWorkflow(TestingService $testingService)
+    {
+        $steps=$testingService->workflowSteps;
+        return view('admin.testing-workflow', compact('testingService','steps'));
+    }
+
+    public function saveTestingWorkflow(Request $request, TestingService $testingService)
+    {
+        $request->validate(["roles"=>"required|array"]);
+        TestingWorkflowStep::where("testing_service_id",$testingService->id)->delete();
+        foreach($request->roles as $i=>$role){
+            TestingWorkflowStep::create(["testing_service_id"=>$testingService->id,"step_order"=>$i+1,"role"=>$role]);
+        }
+        return back()->with("success","Alur pengujian berhasil diperbarui.");
+    }
+
+    public function laboratories()
+    {
+        $laboratories = Laboratory::orderBy('name')->get();
+        return view('admin.laboratories', compact('laboratories'));
+    }
+
+    public function updateLaboratory(Request $request, Laboratory $laboratory)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'nullable|string|max:50',
+            'description' => 'nullable|string|max:1000',
+            'address' => 'nullable|string|max:1000',
+        ]);
+        $laboratory->update($data);
+        return back()->with('success', 'Nama laboratorium berhasil diperbarui.');
+    }
+
 }

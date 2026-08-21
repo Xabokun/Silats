@@ -42,7 +42,7 @@
 
     $openTag = '{' . '{';
     $closeTag = '}' . '}';
-    $defaultBody = "Dengan hormat,\n\nDengan ini menerangkan bahwa:\n\nNama : {$openTag}nama{$closeTag}\nNPM : {$openTag}npm{$closeTag}\n\nberdasarkan data pengajuan, yang bersangkutan memerlukan surat terkait {$openTag}perihal{$closeTag}.\n\nDemikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.";
+    $defaultBody = "Dengan hormat,\n\nDengan ini menerangkan bahwa:\n\nNama       : {$openTag}nama{$closeTag}\nNPM        : {$openTag}npm{$closeTag}\nPerihal    : {$openTag}perihal{$closeTag}\n\nberdasarkan data pengajuan, yang bersangkutan memerlukan surat terkait {$openTag}perihal{$closeTag}.\n\nDemikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.";
 @endphp
 
 @section('content')
@@ -61,38 +61,43 @@
             <div class="col-xl-7">
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body p-4">
-                        <h4 class="mb-3">1. Identitas & Template Surat</h4>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="mb-1">1. Identitas & Template Surat</h4>
+                                <div class="text-secondary small">Form utama untuk menyiapkan dokumen surat resmi.</div>
+                            </div>
+                        </div>
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <label class="form-label">Kode Surat</label>
+                                <label class="form-label fw-semibold">Kode Surat</label>
                                 <input class="form-control" name="code" required value="{{ old('code', $type->code) }}" placeholder="SKPRAK">
                             </div>
                             <div class="col-md-8">
-                                <label class="form-label">Judul Jenis Surat</label>
+                                <label class="form-label fw-semibold">Judul Jenis Surat</label>
                                 <input class="form-control" name="title" required value="{{ old('title', $type->title) }}" placeholder="Surat Keterangan Praktikum">
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Deskripsi</label>
+                                <label class="form-label fw-semibold">Deskripsi</label>
                                 <textarea class="form-control" name="description" rows="2">{{ old('description', $type->description) }}</textarea>
                             </div>
                             <div class="col-md-8">
-                                <label class="form-label">Perihal Default</label>
+                                <label class="form-label fw-semibold">Perihal Default</label>
                                 <input class="form-control" name="default_subject" value="{{ old('default_subject', $type->default_subject) }}" placeholder="Keterangan Praktikum">
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Lampiran</label>
+                                <label class="form-label fw-semibold">Lampiran</label>
                                 <input class="form-control" name="attachment_text" value="{{ old('attachment_text', $type->attachment_text ?: '-') }}" placeholder="- / 1 Berkas">
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Format Nomor Surat</label>
+                                <label class="form-label fw-semibold">Format Nomor Surat</label>
                                 <input class="form-control" name="number_format" required value="{{ old('number_format', $type->number_format ?: '{seq}/{code}/{month_roman}/{year}') }}">
                                 <div class="form-text">Token: <code>{seq}</code>, <code>{code}</code>, <code>{month}</code>, <code>{month_roman}</code>, <code>{year}</code>, <code>{lab}</code>.</div>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Isi Surat</label>
+                                <label class="form-label fw-semibold">Isi Surat</label>
                                 <textarea class="form-control font-monospace" name="body_template" rows="13" required>{{ old('body_template', $type->body_template ?: $defaultBody) }}</textarea>
                                 <div class="form-text">
-                                    Placeholder otomatis: <code>@{{nama}}</code>, <code>@{{npm}}</code>, <code>@{{email}}</code>, <code>@{{perihal}}</code>, <code>@{{laboratorium}}</code>, <code>@{{tanggal_surat}}</code>, <code>@{{nomor_surat}}</code>. Field buatan Admin dipanggil dengan <code>@{{field:nama_key}}</code>.
+                                    Placeholder otomatis: <code>@{{nama}}</code>, <code>@{{npm}}</code>, <code>@{{email}}</code>, <code>@{{perihal}}</code>, <code>@{{laboratorium}}</code>, <code>@{{tanggal_surat}}</code>, <code>@{{nomor_surat}}</code>. Field bawaan admin dipanggil dengan <code>@{{field:nama_key}}</code>.
                                 </div>
                             </div>
                         </div>
@@ -102,7 +107,10 @@
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div><h4 class="mb-1">2. Data Kebutuhan Surat</h4><div class="text-secondary small">Field ini diisi pemohon ketika mengajukan surat.</div></div>
+                            <div>
+                                <h4 class="mb-1">2. Data Kebutuhan Surat</h4>
+                                <div class="text-secondary small">Field ini diisi pemohon saat pengajuan surat berlangsung.</div>
+                            </div>
                             <button type="button" class="btn btn-sm btn-outline-primary" onclick="addField()">+ Field</button>
                         </div>
                         <div id="fields">
@@ -130,7 +138,10 @@
                 <div class="card border-0 shadow-sm">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div><h4 class="mb-1">3. Persyaratan Berkas</h4><div class="text-secondary small">Berkas PDF/JPG/PNG yang wajib diunggah pemohon.</div></div>
+                            <div>
+                                <h4 class="mb-1">3. Persyaratan Berkas</h4>
+                                <div class="text-secondary small">Dokumen pendukung yang wajib dilampirkan pemohon.</div>
+                            </div>
                             <button type="button" class="btn btn-sm btn-outline-primary" onclick="addReq()">+ Syarat</button>
                         </div>
                         <div id="reqs">
@@ -148,17 +159,20 @@
             <div class="col-xl-5">
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body p-4">
-                        <h4>4. Penandatangan</h4>
-                        <div class="mb-3"><label class="form-label">Nama</label><input class="form-control" name="signatory_name" required value="{{ old('signatory_name', $type->signatory_name) }}" placeholder="Dr. Ahmad, S.T., M.T."></div>
-                        <div class="mb-3"><label class="form-label">Jabatan</label><input class="form-control" name="signatory_position" required value="{{ old('signatory_position', $type->signatory_position) }}" placeholder="Kepala Laboratorium"></div>
-                        <div><label class="form-label">NIDN</label><input class="form-control" name="signatory_identifier" value="{{ old('signatory_identifier', $type->signatory_identifier) }}" placeholder="NIDN. 0000000000"></div>
+                        <h4 class="mb-3">4. Penandatangan</h4>
+                        <div class="mb-3"><label class="form-label fw-semibold">Nama</label><input class="form-control" name="signatory_name" required value="{{ old('signatory_name', $type->signatory_name) }}" placeholder="Dr. Ahmad, S.T., M.T."></div>
+                        <div class="mb-3"><label class="form-label fw-semibold">Jabatan</label><input class="form-control" name="signatory_position" required value="{{ old('signatory_position', $type->signatory_position) }}" placeholder="Kepala Laboratorium"></div>
+                        <div><label class="form-label fw-semibold">NIDN</label><input class="form-control" name="signatory_identifier" value="{{ old('signatory_identifier', $type->signatory_identifier) }}" placeholder="NIDN. 0000000000"></div>
                     </div>
                 </div>
 
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div><h4 class="mb-1">5. Workflow Surat</h4><div class="text-secondary small">Urutan pemrosesan ditentukan hanya oleh Admin.</div></div>
+                            <div>
+                                <h4 class="mb-1">5. Workflow Surat</h4>
+                                <div class="text-secondary small">Urutan pemrosesan ditentukan secara terpusat oleh Admin.</div>
+                            </div>
                             <button type="button" class="btn btn-sm btn-outline-primary" onclick="addStep()">+ Tahap</button>
                         </div>
                         <div id="steps">
@@ -166,7 +180,7 @@
                                 <div class="row g-2 mb-2 step-row" data-index="{{ $index }}">
                                     <div class="col-5">
                                         <select class="form-select" name="workflow_roles[{{ $index }}]" required>
-                                            @foreach(['mahasiswa'=>'Mahasiswa','admin'=>'Admin','dosen'=>'Dosen','tenaga_labor'=>'Tenaga Labor','kepala_labor'=>'Kepala Labor','prodi'=>'Prodi','umum'=>'Umum'] as $value => $label)
+                                            @foreach(['mahasiswa'=>'Mahasiswa','admin'=>'Admin','dosen'=>'Dosen','tenaga_labor'=>'Tenaga Labor','kepala_labor'=>'Kepala Labor','prodi'=>'Ka/Sekretaris Program Studi','umum'=>'Umum'] as $value => $label)
                                                 <option value="{{ $value }}" @selected($step['role']===$value)>{{ $label }}</option>
                                             @endforeach
                                         </select>
@@ -219,7 +233,7 @@ function addStep() {
     const i = stepIndex++;
     document.getElementById('steps').insertAdjacentHTML('beforeend', `
         <div class="row g-2 mb-2 step-row" data-index="${i}">
-            <div class="col-5"><select class="form-select" name="workflow_roles[${i}]" required><option value="mahasiswa">Mahasiswa</option><option value="admin">Admin</option><option value="dosen">Dosen</option><option value="tenaga_labor">Tenaga Labor</option><option value="kepala_labor">Kepala Labor</option><option value="prodi">Prodi</option><option value="umum">Umum</option></select></div>
+            <div class="col-5"><select class="form-select" name="workflow_roles[${i}]" required><option value="mahasiswa">Mahasiswa</option><option value="admin">Admin</option><option value="dosen">Dosen</option><option value="tenaga_labor">Tenaga Labor</option><option value="kepala_labor">Kepala Labor</option><option value="prodi">Ka/Sekretaris Program Studi</option><option value="umum">Umum</option></select></div>
             <div class="col-5"><input class="form-control" name="workflow_labels[${i}]" required placeholder="Label tahap"></div>
             <div class="col-2"><button type="button" class="btn btn-outline-danger w-100" onclick="this.closest('.step-row').remove()">×</button></div>
         </div>`);

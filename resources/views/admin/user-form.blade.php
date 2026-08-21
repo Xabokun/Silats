@@ -30,7 +30,7 @@
                                 <label class="form-label">Role Sistem</label>
                                 <select class="form-select" name="role" id="role" required>
                                     <option value="">Pilih role</option>
-                                    @foreach(['admin'=>'Admin','mahasiswa'=>'Mahasiswa','dosen'=>'Dosen','tenaga_labor'=>'Tenaga Labor','kepala_labor'=>'Kepala Labor','prodi'=>'Program Studi','umum'=>'Masyarakat'] as $value=>$label)
+                                    @foreach(['admin'=>'Admin','mahasiswa'=>'Mahasiswa','dosen'=>'Dosen','tenaga_labor'=>'Tenaga Labor','kepala_labor'=>'Kepala Labor','prodi'=>'Ka/Sekretaris Program Studi','umum'=>'Masyarakat'] as $value=>$label)
                                         <option value="{{ $value }}" @selected($roleValue===$value)>{{ $label }}</option>
                                     @endforeach
                                 </select>

@@ -36,12 +36,19 @@ Route::middleware('auth')->group(function () {
         Route::post('/akun', [AdminController::class, 'storeUser'])->name('users.store');
         Route::get('/akun/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
         Route::put('/akun/{user}', [AdminController::class, 'updateUser'])->name('users.update');
+        Route::delete('/akun/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
         Route::get('/kelas', [AdminController::class, 'classes'])->name('classes');
         Route::get('/kelas/buat', [AdminController::class, 'createClass'])->name('classes.create');
         Route::post('/kelas', [AdminController::class, 'storeClass'])->name('classes.store');
         Route::get('/kelas/{class}/edit', [AdminController::class, 'editClass'])->name('classes.edit');
         Route::put('/kelas/{class}', [AdminController::class, 'updateClass'])->name('classes.update');
+        Route::delete('/kelas/{class}', [AdminController::class, 'destroyClass'])->name('classes.destroy');
+        Route::put('/kelas/{class}/verifikasi', [AdminController::class, 'verifyClass'])->name('classes.verify');
+
+        Route::get('/tipe-kelas', [AdminController::class, 'classTypes'])->name('class-types');
+        Route::post('/tipe-kelas', [AdminController::class, 'storeClassType'])->name('class-types.store');
+        Route::delete('/tipe-kelas/{classType}', [AdminController::class, 'destroyClassType'])->name('class-types.destroy');
 
         Route::get('/pendaftaran-praktikum', [AdminController::class, 'registrations'])->name('registrations');
         Route::put('/pendaftaran-praktikum/{registration}', [AdminController::class, 'verifyRegistration'])->name('registrations.verify');
@@ -52,10 +59,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/jenis-surat/{letterType}/edit', [AdminController::class, 'editLetterType'])->name('letter-types.edit');
         Route::put('/jenis-surat/{letterType}', [AdminController::class, 'updateLetterType'])->name('letter-types.update');
         Route::get('/pengaturan-surat', [AdminController::class, 'letterSettings'])->name('letter-settings');
+        Route::get('/laboratorium', [AdminController::class, 'laboratories'])->name('laboratories');
+        Route::post('/laboratorium', [AdminController::class, 'storeLaboratory'])->name('laboratories.store');
+        Route::put('/laboratorium/{laboratory}', [AdminController::class, 'updateLaboratory'])->name('laboratories.update');
+        Route::delete('/laboratorium/{laboratory}', [AdminController::class, 'destroyLaboratory'])->name('laboratories.destroy');
+        Route::get('/mata-kuliah', [AdminController::class, 'courses'])->name('courses');
+        Route::post('/mata-kuliah', [AdminController::class, 'storeCourse'])->name('courses.store');
+        Route::delete('/mata-kuliah/{course}', [AdminController::class, 'destroyCourse'])->name('courses.destroy');
         Route::put('/pengaturan-surat', [AdminController::class, 'updateLetterSettings'])->name('letter-settings.update');
 
         // Admin dapat menambah kategori dan jenis pengujian secara dinamis.
         Route::get('/jenis-pengujian', [AdminController::class, 'services'])->name('services');
+        Route::get('/alur-pengujian/{testingService}', [AdminController::class, 'testingWorkflow'])->name('testing-workflow');
+        Route::post('/alur-pengujian/{testingService}', [AdminController::class, 'saveTestingWorkflow'])->name('testing-workflow.save');
         Route::post('/kategori-pengujian', [AdminController::class, 'storeCategory'])->name('categories.store');
         Route::post('/jenis-pengujian', [AdminController::class, 'storeService'])->name('services.store');
     });

@@ -17,7 +17,7 @@
         'dosen'=>'Dosen',
         'tenaga_labor'=>'Tenaga Labor',
         'kepala_labor'=>'Kepala Labor',
-        'prodi'=>'Program Studi',
+        'prodi'=>'Ka/Sekretaris Program Studi',
         'umum'=>'Masyarakat'
     ];
 @endphp
@@ -77,6 +77,7 @@
                 <a class="sidebar-link {{ request()->routeIs('admin.dashboard')?'active':'' }}" href="{{ route('admin.dashboard') }}"><span class="sidebar-dot"></span>Dashboard</a>
                 <a class="sidebar-link {{ request()->routeIs('admin.users*')?'active':'' }}" href="{{ route('admin.users') }}"><span class="sidebar-dot"></span>Manajemen Akun</a>
                 <a class="sidebar-link {{ request()->routeIs('admin.classes*')?'active':'' }}" href="{{ route('admin.classes') }}"><span class="sidebar-dot"></span>Jadwal & Kelas</a>
+                <a class="sidebar-link {{ request()->routeIs('admin.class-types*')?'active':'' }}" href="{{ route('admin.class-types') }}"><span class="sidebar-dot"></span>Master Tipe Kelas</a>
                 <a class="sidebar-link {{ request()->routeIs('admin.registrations*')?'active':'' }}" href="{{ route('admin.registrations') }}"><span class="sidebar-dot"></span>Verifikasi Praktikum</a>
                 <a class="sidebar-link {{ request()->routeIs('admin.letter-types*')?'active':'' }}" href="{{ route('admin.letter-types') }}"><span class="sidebar-dot"></span>Manajemen Surat</a>
                 <a class="sidebar-link {{ request()->routeIs('admin.letter-settings*')?'active':'' }}" href="{{ route('admin.letter-settings') }}"><span class="sidebar-dot"></span>Pengaturan Kop Surat</a>

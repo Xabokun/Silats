@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title','Semua Kelas Praktikum')
-@section('page_heading','Semua Kelas Praktikum')
+@section('title','Daftar Kelas Praktikum')
+@section('page_heading','Daftar Kelas Praktikum')
 @section('content')
-<div>
+<div class="container-fluid px-0">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <h2 class="fw-bold mb-1">Semua Kelas Praktikum</h2>
-            <p class="text-secondary mb-0">Daftar seluruh kelas praktikum dari semua laboratorium yang dapat dipantau oleh Prodi.</p>
+            <h2 class="fw-bold mb-1">Daftar Kelas Praktikum</h2>
+            <p class="text-secondary mb-0">Monitoring seluruh kelas praktik dari unit laboratorium sesuai kebutuhan program studi.</p>
         </div>
         <a href="{{ route('prodi.dashboard') }}" class="btn btn-outline-secondary">Kembali ke Monitoring</a>
     </div>
@@ -15,7 +15,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead>
+                    <thead class="table-light">
                         <tr>
                             <th class="ps-4">Mata Kuliah</th>
                             <th>Kelas</th>

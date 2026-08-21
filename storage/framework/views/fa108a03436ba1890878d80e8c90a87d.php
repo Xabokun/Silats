@@ -41,7 +41,7 @@
                         $active = $letterRequest->status === 'in_process' && $letterRequest->current_step_order == $step->step_order;
                     ?>
                     <div class="col-md">
-                        <div class="p-3 rounded h-100 <?php echo e($done ? 'bg-success-subtle' : ($active ? 'bg-warning-subtle' : 'bg-light')); ?>">
+                        <div class="p-3 rounded h-100 <?php echo e($done ? 'bg-success-subtle border border-success-subtle' : ($active ? 'bg-warning-subtle border border-warning-subtle' : 'bg-light border')); ?>">
                             <div class="small">Tahap <?php echo e($step->step_order); ?></div>
                             <strong><?php echo e($done ? '✓ ' : ($active ? '● ' : '○ ')); ?><?php echo e($step->label); ?></strong>
                             <div class="small text-secondary"><?php echo e(str_replace('_', ' ', $step->role)); ?></div>
@@ -98,10 +98,10 @@
                 </div>
             </div>
 
-            <?php if($letterRequest->status === 'in_process' && $current && $current->role === auth()->user()->role): ?>
+            <?php if($letterRequest->status === 'in_process' && $current && ($current->role === auth()->user()->role || auth()->user()->isRole('admin'))): ?>
                 <div class="card border-primary shadow-sm">
                     <div class="card-body p-4">
-                        <h5>Proses Tahap Anda</h5>
+                        <h5><?php echo e(auth()->user()->isRole('admin') ? 'Proses Tahap Surat oleh Admin' : 'Proses Tahap Anda'); ?></h5>
                         <p class="small text-secondary"><?php echo e($current->label); ?></p>
                         <form method="POST" action="<?php echo e(route('surat.action', $letterRequest)); ?>">
                             <?php echo csrf_field(); ?>
