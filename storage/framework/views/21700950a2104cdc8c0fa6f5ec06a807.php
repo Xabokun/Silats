@@ -53,7 +53,16 @@
                                 <?php endif; ?>
                             </td>
                             <td class="text-end pe-4">
-                                <a href="<?php echo e(route('admin.users.edit', $user)); ?>" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="<?php echo e(route('admin.users.edit', $user)); ?>" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <?php if($user->id !== auth()->id()): ?>
+                                        <form method="POST" action="<?php echo e(route('admin.users.destroy', $user)); ?>" onsubmit="return confirm('Hapus akun <?php echo e(addslashes($user->name)); ?>? Data terkait akun ini juga dapat ikut terhapus.');">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

@@ -10,7 +10,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
                     <h3 class="mb-1">Kop Surat Resmi</h3>
-                    <p class="text-secondary">SILATS menggunakan kop Fakultas Teknik sesuai contoh UIR yang Anda berikan. Anda dapat mengganti gambar kop dari sini.</p>
+                    <p class="text-secondary">SILATS menggunakan kop Program Studi Teknik Sipil sesuai contoh UIR yang Anda berikan. Anda dapat mengganti gambar kop dari sini.</p>
 
                     <form method="POST" enctype="multipart/form-data" action="{{ route('admin.letter-settings.update') }}">
                         @csrf
@@ -29,7 +29,7 @@
 
                         <div class="row g-3">
                             <div class="col-md-6"><label class="form-label">Nama Universitas / Institusi</label><input class="form-control" name="institution_name" required value="{{ old('institution_name', $settings->institution_name ?: 'UNIVERSITAS ISLAM RIAU') }}"></div>
-                            <div class="col-md-6"><label class="form-label">Nama Fakultas</label><input class="form-control" name="faculty_name" required value="{{ old('faculty_name', $settings->faculty_name ?: 'FAKULTAS TEKNIK') }}"></div>
+                            <div class="col-md-6"><label class="form-label">Nama Program Studi</label><input class="form-control" name="faculty_name" required value="{{ old('faculty_name', $settings->faculty_name ?: 'PROGRAM STUDI TEKNIK SIPIL') }}"></div>
                             <div class="col-md-6"><label class="form-label">Unit / Program Studi / Laboratorium</label><input class="form-control" name="unit_name" value="{{ old('unit_name', $settings->unit_name) }}"></div>
                             <div class="col-md-6"><label class="form-label">Kota Penerbitan</label><input class="form-control" name="city" required value="{{ old('city', $settings->city ?: 'Pekanbaru') }}"></div>
                             <div class="col-12"><label class="form-label">Alamat</label><textarea class="form-control" rows="2" name="address">{{ old('address', $settings->address) }}</textarea></div>

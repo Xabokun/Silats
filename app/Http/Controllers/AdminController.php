@@ -102,6 +102,10 @@ class AdminController extends Controller
 
     public function destroyUser(User $user)
     {
+        if ($user->is(auth()->user())) {
+            return back()->with('error', 'Akun Admin yang sedang digunakan tidak dapat dihapus.');
+        }
+
         $user->delete();
         return back()->with('success', 'Akun berhasil dihapus.');
     }
@@ -318,7 +322,7 @@ class AdminController extends Controller
 
     private function classData(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'course_id' => 'required|exists:courses,id',
             'laboratory_id' => 'required|exists:laboratories,id',
             'lecturer_id' => 'nullable|exists:users,id',
@@ -328,10 +332,20 @@ class AdminController extends Controller
             'day' => 'required|string|max:20',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
+            'practicum_date' => 'nullable|date',
+            'enrollment_deadline' => 'nullable|date',
+            'module_file' => 'nullable|file|mimes:pdf|max:10240',
             'capacity' => 'required|integer|min:1|max:300',
             'semester' => 'required|string|max:20',
             'academic_year' => 'required|string|max:20',
         ]);
+
+        if ($request->hasFile('module_file')) {
+            $data['module_path'] = $request->file('module_file')->store('modul-praktikum', 'public');
+        }
+
+        unset($data['module_file']);
+        return $data;
     }
 
     public function registrations()

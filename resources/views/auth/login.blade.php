@@ -16,7 +16,7 @@
                         <button class="btn btn-primary w-100">Masuk</button>
                     </form>
                     <hr>
-                    <p class="small text-secondary mb-0">Belum memiliki akun? Hubungi Admin SILATS. Registrasi mandiri tidak tersedia.</p>
+                    <p class="small text-secondary mb-0">Belum memiliki akun mahasiswa? <a href="{{ route('register') }}">Daftar dengan email student UIR</a>.</p>
                 </div>
             </div>
         </div>

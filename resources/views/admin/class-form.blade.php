@@ -13,7 +13,7 @@
                 <div class="card-body p-4">
                     <h3 class="fw-bold mb-4">{{ $class->exists ? 'Edit' : 'Tambah' }} Jadwal/Kelas</h3>
 
-                    <form method="POST" action="{{ $class->exists ? route('admin.classes.update', $class) : route('admin.classes.store') }}">
+                    <form method="POST" enctype="multipart/form-data" action="{{ $class->exists ? route('admin.classes.update', $class) : route('admin.classes.store') }}">
                         @csrf
                         @if($class->exists)
                             @method('PUT')
@@ -59,7 +59,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Kelas</label>
+                                <label class="form-label">Kelompok</label>
                                 <input class="form-control" name="class_name" value="{{ old('class_name', $class->class_name) }}" required>
                             </div>
 
@@ -78,7 +78,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Ruangan</label>
+                                <label class="form-label">Modul / Ruangan</label>
                                 <input class="form-control" name="room" value="{{ old('room', $class->room) }}" required>
                             </div>
 
@@ -100,6 +100,22 @@
                             <div class="col-md-3">
                                 <label class="form-label">Waktu Selesai</label>
                                 <input type="time" class="form-control" name="end_time" value="{{ old('end_time', $class->end_time) }}" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Tanggal Praktikum</label>
+                                <input type="date" class="form-control" name="practicum_date" value="{{ old('practicum_date', optional($class->practicum_date)->format('Y-m-d')) }}">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Batas Pengisian</label>
+                                <input type="datetime-local" class="form-control" name="enrollment_deadline" value="{{ old('enrollment_deadline', optional($class->enrollment_deadline)->format('Y-m-d\\TH:i')) }}">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Modul PDF</label>
+                                <input type="file" class="form-control" name="module_file" accept="application/pdf">
+                                @if($class->module_path)<a class="small" target="_blank" href="{{ asset('storage/'.$class->module_path) }}">Lihat modul saat ini</a>@endif
                             </div>
 
                             <div class="col-12 d-flex justify-content-between align-items-center mt-3">

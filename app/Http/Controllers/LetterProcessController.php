@@ -240,8 +240,8 @@ class LetterProcessController extends Controller
 
         $settings = LetterheadSetting::first() ?? new LetterheadSetting([
             'institution_name' => 'UNIVERSITAS ISLAM RIAU',
-            'faculty_name' => 'FAKULTAS TEKNIK',
-            'unit_name' => null,
+            'faculty_name' => 'PROGRAM STUDI TEKNIK SIPIL',
+            'unit_name' => 'PROGRAM STUDI TEKNIK SIPIL',
             'city' => 'Pekanbaru',
             'header_image_path' => null,
         ]);

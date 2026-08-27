@@ -19,10 +19,10 @@
                 <thead class="table-light">
                     <tr>
                         <th class="ps-4">Mata Kuliah</th>
-                        <th>Kelas</th>
+                        <th>Kelompok</th>
                         <th>Dosen</th>
                         <th>Lab / Ruangan</th>
-                        <th>Jadwal</th>
+                        <th>Jadwal Praktikum</th>
                         <th>Kapasitas</th>
                         <th class="text-end pe-4">Aksi</th>
                     </tr>
@@ -37,7 +37,7 @@
                                 {{ $c->laboratory->name }}
                                 <div class="small text-secondary">{{ $c->room }}</div>
                             </td>
-                            <td>{{ $c->day }}, {{ substr($c->start_time,0,5) }}–{{ substr($c->end_time,0,5) }}</td>
+                            <td>{{ $c->practicum_date?->format('d-m-Y') ?: '-' }}<div class="small text-secondary">{{ $c->day }}, {{ substr($c->start_time,0,5) }}–{{ substr($c->end_time,0,5) }}</div></td>
                             <td>
                                 <span class="fw-semibold">{{ $c->final_registrations_count }}/{{ $c->capacity }}</span>
                                 <div class="small text-secondary">{{ $c->registrations_count }} pemilih</div>

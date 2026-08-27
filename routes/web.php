@@ -17,10 +17,11 @@ use App\Http\Controllers\{
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Registrasi publik dinonaktifkan. Semua akun dibuat oleh Admin.
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 });
 
 Route::middleware('auth')->group(function () {
@@ -81,6 +82,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/praktikum', [StudentController::class, 'practicums'])->name('practicums');
         Route::get('/praktikum/{class}/daftar', [StudentController::class, 'apply'])->name('apply');
         Route::post('/praktikum/{class}/daftar', [StudentController::class, 'store'])->name('store');
+        Route::get('/praktikum/{registration}/surat-lolos', [StudentController::class, 'practicumCertificate'])->name('practicum-certificate');
     });
 
     Route::prefix('dosen')->name('dosen.')->middleware('role:dosen')->group(function () {
@@ -94,6 +96,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/pengujian/{testingRequest}/terima-sampel', [LabStaffController::class, 'receiveSample'])->name('tests.receive');
         Route::post('/pengujian/{testingRequest}/mulai', [LabStaffController::class, 'start'])->name('tests.start');
         Route::post('/pengujian/{testingRequest}/selesai', [LabStaffController::class, 'complete'])->name('tests.complete');
+        Route::post('/praktikum/{registration}/nilai', [LabStaffController::class, 'updatePracticumScore'])->name('practicums.score');
+        Route::post('/kelompok/{class}/atur', [LabStaffController::class, 'updatePracticumClass'])->name('practicums.update');
+        Route::get('/kelompok/{class}/mahasiswa.xlsx', [LabStaffController::class, 'exportPracticumGroup'])->name('practicums.export');
     });
 
     Route::get('/kepala-labor', [HeadLabController::class, 'dashboard'])->name('kepala-labor.dashboard')->middleware('role:kepala_labor');

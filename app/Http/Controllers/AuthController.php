@@ -18,6 +18,33 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function showRegister()
+    {
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'npm' => 'required|string|max:50|unique:users,npm',
+            'email' => ['required', 'email', 'max:255', 'unique:users,email', 'regex:/^[^@\s]+@student\.uir\.ac\.id$/i'],
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'email.regex' => 'Gunakan email student UIR dengan format nama@student.uir.ac.id.',
+        ]);
+
+        $user = User::create($data + ['role' => 'mahasiswa']);
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('mahasiswa.dashboard')->with('success', 'Akun mahasiswa berhasil dibuat.');
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([

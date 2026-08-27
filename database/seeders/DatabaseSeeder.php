@@ -44,13 +44,15 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $admin = User::create(['name' => 'Admin SILATS', 'email' => 'admin@silats.test', 'role' => 'admin', 'password' => 'password']);
-        $student = User::create(['npm' => '2210001', 'name' => 'Budi Mahasiswa', 'email' => 'mahasiswa@silats.test', 'role' => 'mahasiswa', 'password' => 'password']);
-        $student2 = User::create(['npm' => '2210002', 'name' => 'Siti Mahasiswa', 'email' => 'mahasiswa2@silats.test', 'role' => 'mahasiswa', 'password' => 'password']);
-        $dosen = User::create(['name' => 'Dr. Ahmad, S.T., M.T.', 'email' => 'dosen@silats.test', 'nidn' => '0000000001', 'expertise' => 'Struktur dan Teknologi Beton', 'role' => 'dosen', 'password' => 'password']);
+        $student = User::create(['npm' => '2210001', 'name' => 'Budi Mahasiswa', 'email' => 'budi@student.uir.ac.id', 'role' => 'mahasiswa', 'password' => 'password']);
+        $student2 = User::create(['npm' => '2210002', 'name' => 'Siti Mahasiswa', 'email' => 'siti@student.uir.ac.id', 'role' => 'mahasiswa', 'password' => 'password']);
+        $dosenGeoteknik = User::create(['name' => 'Ir. Sy. Sarah Alwiah, ST., MT.', 'email' => 'sarah.alwiah@silats.test', 'nidn' => '0000000001', 'expertise' => 'Geoteknik dan Jalan Raya', 'role' => 'dosen', 'password' => 'password']);
+        $dosenStruktur = User::create(['name' => 'Ir. Heri Ahmadi, ST., MT. IPM', 'email' => 'heri.ahmadi@silats.test', 'nidn' => '0000000002', 'expertise' => 'Struktur Material dan Komputer', 'role' => 'dosen', 'password' => 'password']);
+        $dosenHidrolika = User::create(['name' => 'Dr. Ir. Yolly Adriati, ST., MT. IPM.', 'email' => 'yolly.adriati@silats.test', 'nidn' => '0000000003', 'expertise' => 'Hidrolika, Hidrologi, dan Lingkungan', 'role' => 'dosen', 'password' => 'password']);
         $labor = User::create(['name' => 'Laboran Beton', 'email' => 'labor@silats.test', 'role' => 'tenaga_labor', 'laboratory_id' => $beton->id, 'password' => 'password']);
         $kalab = User::create(['name' => 'Kepala Lab Beton', 'email' => 'kalab@silats.test', 'role' => 'kepala_labor', 'laboratory_id' => $beton->id, 'password' => 'password']);
-        User::create(['name' => 'Laboran Tanah', 'email' => 'labor.tanah@silats.test', 'role' => 'tenaga_labor', 'laboratory_id' => $tanah->id, 'password' => 'password']);
-        User::create(['name' => 'Kepala Lab Tanah', 'email' => 'kalab.tanah@silats.test', 'role' => 'kepala_labor', 'laboratory_id' => $tanah->id, 'password' => 'password']);
+        $laborTanah = User::create(['name' => 'Laboran Tanah', 'email' => 'labor.tanah@silats.test', 'role' => 'tenaga_labor', 'laboratory_id' => $tanah->id, 'password' => 'password']);
+        $kalabTanah = User::create(['name' => 'Kepala Lab Tanah', 'email' => 'kalab.tanah@silats.test', 'role' => 'kepala_labor', 'laboratory_id' => $tanah->id, 'password' => 'password']);
         User::create(['name' => 'Laboran Air', 'email' => 'labor.air@silats.test', 'role' => 'tenaga_labor', 'laboratory_id' => $air->id, 'password' => 'password']);
         User::create(['name' => 'Kepala Lab Air', 'email' => 'kalab.air@silats.test', 'role' => 'kepala_labor', 'laboratory_id' => $air->id, 'password' => 'password']);
         User::create(['name' => 'Program Studi Teknik Sipil', 'email' => 'prodi@silats.test', 'role' => 'prodi', 'position_title' => 'Ketua Program Studi Teknik Sipil', 'position_start_date' => '2026-01-01', 'position_end_date' => '2029-01-01', 'password' => 'password']);
@@ -58,26 +60,30 @@ class DatabaseSeeder extends Seeder
 
         LetterheadSetting::create([
             'institution_name' => 'UNIVERSITAS CONTOH',
-            'faculty_name' => 'FAKULTAS TEKNIK SIPIL',
+            'faculty_name' => 'PROGRAM STUDI TEKNIK SIPIL',
             'unit_name' => 'PROGRAM STUDI TEKNIK SIPIL',
             'address' => 'Jl. Pendidikan No. 1, Palu, Sulawesi Tengah',
             'phone' => '(0451) 000000',
             'email' => 'tekniksipil@kampus.ac.id',
             'website' => 'www.kampus.ac.id',
             'city' => 'Pekanbaru',
-            'header_image_path' => 'images/kop-ft-uir.jpg',
+            'header_image_path' => null,
         ]);
 
-        $mkBeton = Course::create(['code' => 'TS-BTN', 'name' => 'Praktikum Teknologi Beton', 'credits' => 1]);
-        $mkTanah = Course::create(['code' => 'TS-TNH', 'name' => 'Praktikum Mekanika Tanah', 'credits' => 1]);
-        $mkAir = Course::create(['code' => 'TS-AIR', 'name' => 'Praktikum Hidrolika', 'credits' => 1]);
+        $mkMekanikaTanah1 = Course::create(['code' => 'TS-MT1', 'name' => 'Mekanika Tanah 1', 'credits' => 1]);
+        $mkMekanikaTanah2 = Course::create(['code' => 'TS-MT2', 'name' => 'Mekanika Tanah 2', 'credits' => 1]);
+        $mkPerkerasan = Course::create(['code' => 'TS-TPJ', 'name' => 'Teknik Perkerasan Jalan', 'credits' => 1]);
+        $mkSurvey = Course::create(['code' => 'TS-TSW', 'name' => 'Teknik Survey Pengukuran Wilayah', 'credits' => 1]);
+        $mkTeknologiBahan = Course::create(['code' => 'TS-TBB', 'name' => 'Teknologi Bahan', 'credits' => 1]);
+        $mkKomputer = Course::create(['code' => 'TS-AKTS', 'name' => 'Aplikasi Komputer untuk Teknik Sipil', 'credits' => 1]);
+        $mkHidrolika = Course::create(['code' => 'TS-HID', 'name' => 'Hidrolika', 'credits' => 1]);
+        $mkHidrologi = Course::create(['code' => 'TS-HTR', 'name' => 'Hidrologi Terapan', 'credits' => 1]);
 
         foreach ([
-            [$mkBeton, 'KRS Semester Aktif'],
-            [$mkBeton, 'Bukti Pembayaran Praktikum'],
-            [$mkTanah, 'KRS Semester Aktif'],
-            [$mkTanah, 'KTM'],
-            [$mkAir, 'KRS Semester Aktif'],
+            [$mkMekanikaTanah1, 'KRS Semester Aktif'], [$mkMekanikaTanah2, 'KRS Semester Aktif'],
+            [$mkPerkerasan, 'KRS Semester Aktif'], [$mkSurvey, 'KRS Semester Aktif'],
+            [$mkTeknologiBahan, 'KRS Semester Aktif'], [$mkKomputer, 'KRS Semester Aktif'],
+            [$mkHidrolika, 'KRS Semester Aktif'], [$mkHidrologi, 'KRS Semester Aktif'],
         ] as [$course, $title]) {
             PracticumRequirement::create([
                 'course_id' => $course->id,
@@ -87,54 +93,37 @@ class DatabaseSeeder extends Seeder
         }
 
         $bA = PracticumClass::create([
-            'course_id' => $mkBeton->id,
-            'laboratory_id' => $beton->id,
-            'lecturer_id' => $dosen->id,
-            'class_name' => 'A',
-            'room' => 'Lab Beton 01',
-            'day' => 'Senin',
-            'start_time' => '08:00',
-            'end_time' => '10:00',
-            'capacity' => 40,
-        ]);
-        PracticumClass::create([
-            'course_id' => $mkBeton->id,
-            'laboratory_id' => $beton->id,
-            'lecturer_id' => $dosen->id,
-            'class_name' => 'B',
-            'room' => 'Lab Beton 01',
-            'day' => 'Senin',
-            'start_time' => '10:00',
-            'end_time' => '12:00',
-            'capacity' => 40,
-        ]);
-        PracticumClass::create([
-            'course_id' => $mkTanah->id,
+            'course_id' => $mkMekanikaTanah1->id,
             'laboratory_id' => $tanah->id,
-            'lecturer_id' => $dosen->id,
+            'lecturer_id' => $dosenGeoteknik->id,
             'class_name' => 'A',
-            'room' => 'Lab Tanah',
-            'day' => 'Selasa',
+            'room' => 'Modul Mekanika Tanah 1',
+            'day' => 'Senin',
             'start_time' => '08:00',
             'end_time' => '10:00',
             'capacity' => 40,
+            'semester' => 'Ganjil',
         ]);
-        PracticumClass::create([
-            'course_id' => $mkAir->id,
-            'laboratory_id' => $air->id,
-            'lecturer_id' => $dosen->id,
-            'class_name' => 'A',
-            'room' => 'Lab Hidrolika',
-            'day' => 'Rabu',
-            'start_time' => '09:00',
-            'end_time' => '11:00',
-            'capacity' => 35,
-        ]);
+        foreach ([
+            [$mkMekanikaTanah2, $tanah, $dosenGeoteknik, 'Genap'], [$mkPerkerasan, $tanah, $dosenGeoteknik, 'Genap'],
+            [$mkSurvey, $tanah, $dosenGeoteknik, 'Ganjil'], [$mkTeknologiBahan, $beton, $dosenStruktur, 'Genap'],
+            [$mkKomputer, $beton, $dosenStruktur, 'Genap'], [$mkHidrolika, $air, $dosenHidrolika, 'Ganjil'],
+            [$mkHidrologi, $air, $dosenHidrolika, 'Genap'],
+        ] as $index => [$course, $laboratory, $lecturer, $semester]) {
+            PracticumClass::create([
+                'course_id' => $course->id, 'laboratory_id' => $laboratory->id, 'lecturer_id' => $lecturer->id,
+                'class_name' => 'A', 'room' => 'Modul '.$course->name, 'day' => ['Senin', 'Selasa', 'Rabu', 'Kamis'][$index % 4],
+                'start_time' => '08:00', 'end_time' => '10:00', 'capacity' => 40, 'semester' => $semester,
+            ]);
+        }
         PracticumRegistration::create([
             'student_id' => $student2->id,
             'practicum_class_id' => $bA->id,
             'final_class_id' => $bA->id,
             'status' => 'approved',
+            'final_score' => 85,
+            'score_entered_by' => $laborTanah->id,
+            'score_entered_at' => now(),
             'verified_by' => $admin->id,
             'verified_at' => now(),
         ]);
@@ -183,14 +172,14 @@ class DatabaseSeeder extends Seeder
 
         $practicumLetter = LetterType::create([
             'code' => 'SKPRAK',
-            'title' => 'Surat Keterangan Praktikum',
+            'title' => 'Surat Lolos Praktikum',
             'description' => 'Surat keterangan terkait kegiatan praktikum mahasiswa.',
-            'default_subject' => 'Keterangan Praktikum',
+            'default_subject' => 'Keterangan Lolos Praktikum',
             'attachment_text' => '1 Berkas',
             'number_format' => '{seq}/{code}/{month_roman}/{year}',
-            'signatory_name' => 'Dr. Ahmad, S.T., M.T.',
+            'signatory_name' => 'Kepala Laboratorium',
             'signatory_position' => 'Kepala Laboratorium',
-            'signatory_identifier' => 'NIDN. 0000000001',
+            'signatory_identifier' => null,
             'body_template' => "Dengan hormat,\n\nDengan ini menerangkan bahwa:\n\nNama : {{nama}}\nNPM : {{npm}}\nSemester : {{field:semester}}\n\ntelah mengikuti kegiatan {{field:nama_praktikum}} pada {{laboratorium}}. Surat ini diterbitkan untuk keperluan {{field:keperluan}}.\n\nDemikian surat ini dibuat untuk dapat dipergunakan sebagaimana mestinya.",
             'created_by' => $admin->id,
         ]);

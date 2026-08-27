@@ -4,13 +4,13 @@
     <div class="container py-4">
         <div class="row align-items-center g-4">
             <div class="col-lg-7">
-                <span class="badge text-bg-light mb-3">Fakultas Teknik Sipil</span>
+                <span class="badge text-bg-light mb-3">Program Studi Teknik Sipil</span>
                 <h1 class="display-5 fw-bold">SILATS</h1>
                 <p class="lead">Sistem terpadu untuk pendaftaran praktikum, pengujian material masyarakat, dan pengurusan surat berjenjang.</p>
-                <div class="d-flex gap-2">
+                <div class="d-flex flex-wrap gap-2">
                     <a class="btn btn-light px-4" href="<?php echo e(route('login')); ?>">Login SILATS</a>
+                    <a class="btn btn-outline-light px-4" href="<?php echo e(route('register')); ?>">Register Mahasiswa</a>
                 </div>
-                <p class="small mt-3 mb-0 opacity-75">Akun pengguna dibuat dan dikelola oleh Admin SILATS.</p>
             </div>
             <div class="col-lg-5">
                 <div class="card border-0 shadow">

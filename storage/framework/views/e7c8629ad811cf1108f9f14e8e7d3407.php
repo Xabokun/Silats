@@ -38,6 +38,65 @@
         </div>
     </div>
 
+    <?php if(auth()->user()->isRole('admin', 'prodi')): ?>
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="mb-1">Surat Menunggu Persetujuan</h5>
+                        <p class="text-secondary mb-0">Daftar semua pengajuan surat yang masih menunggu approval di tahap aktif.</p>
+                    </div>
+                    <span class="badge text-bg-warning"><?php echo e($pendingLetters->count()); ?> menunggu</span>
+                </div>
+
+                <?php if($pendingLetters->isEmpty()): ?>
+                    <div class="text-secondary">Tidak ada surat yang menunggu persetujuan saat ini.</div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nomor</th>
+                                    <th>Jenis Surat</th>
+                                    <th>Pemohon</th>
+                                    <th>Tahap Saat Ini</th>
+                                    <th>Role Penanggung Jawab</th>
+                                    <th class="text-end">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $__currentLoopData = $pendingLetters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $letter): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php
+                                        $step = $letter->letterType->workflowSteps->firstWhere('step_order', $letter->current_step_order);
+                                        $roleLabel = [
+                                            'admin' => 'Admin',
+                                            'mahasiswa' => 'Mahasiswa',
+                                            'dosen' => 'Dosen',
+                                            'tenaga_labor' => 'Tenaga Labor',
+                                            'kepala_labor' => 'Kepala Labor',
+                                            'prodi' => 'Ka/Sekretaris Program Studi',
+                                            'umum' => 'Umum',
+                                        ][$step?->role ?? 'admin'];
+                                    ?>
+                                    <tr>
+                                        <td class="fw-semibold"><?php echo e($letter->request_number); ?></td>
+                                        <td><?php echo e($letter->letterType->title); ?></td>
+                                        <td><?php echo e($letter->applicant->name); ?></td>
+                                        <td><?php echo e($step?->label ?? '-'); ?></td>
+                                        <td><?php echo e($roleLabel); ?></td>
+                                        <td class="text-end">
+                                            <a class="btn btn-sm btn-outline-primary" href="<?php echo e(route('surat.show', $letter)); ?>">Lihat</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
