@@ -39,8 +39,8 @@
                             </td>
                             <td>{{ $c->practicum_date?->format('d-m-Y') ?: '-' }}<div class="small text-secondary">{{ $c->day }}, {{ substr($c->start_time,0,5) }}–{{ substr($c->end_time,0,5) }}</div></td>
                             <td>
-                                <span class="fw-semibold">{{ $c->final_registrations_count }}/{{ $c->capacity }}</span>
-                                <div class="small text-secondary">{{ $c->registrations_count }} pemilih</div>
+                                <span class="fw-semibold">{{ $c->final_registrations_count + $c->pending_registrations_count }}/{{ $c->capacity }}</span>
+                                <div class="small text-secondary">{{ $c->pending_registrations_count }} menunggu verifikasi</div>
                             </td>
                             <td class="text-end pe-4">
                                 <div class="d-flex justify-content-end gap-2">

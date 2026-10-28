@@ -283,7 +283,11 @@ class AdminController extends Controller
     public function classes()
     {
         $classes = PracticumClass::with(['course', 'laboratory', 'lecturer', 'classType'])
-            ->withCount(['registrations', 'finalRegistrations'])
+            ->withCount([
+                'registrations',
+                'registrations as pending_registrations_count' => fn ($query) => $query->where('status', 'pending_verification'),
+                'finalRegistrations' => fn ($query) => $query->where('status', 'approved'),
+            ])
             ->orderBy('day')
             ->get();
         return view('admin.classes', compact('classes'));
@@ -333,7 +337,8 @@ class AdminController extends Controller
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
             'practicum_date' => 'nullable|date',
-            'enrollment_deadline' => 'nullable|date',
+            'enrollment_starts_at' => 'nullable|date',
+            'enrollment_deadline' => 'nullable|date'.($request->filled('enrollment_starts_at') ? '|after_or_equal:enrollment_starts_at' : ''),
             'module_file' => 'nullable|file|mimes:pdf|max:10240',
             'capacity' => 'required|integer|min:1|max:300',
             'semester' => 'required|string|max:20',
@@ -366,18 +371,22 @@ class AdminController extends Controller
             'admin_note' => 'nullable|string|max:1000',
         ]);
 
-        if ($data['decision'] === 'approved') {
-            $target = PracticumClass::findOrFail($data['final_class_id']);
-            $filled = $target->finalRegistrations()
-                ->where('status', 'approved')
-                ->where('id', '!=', $registration->id)
-                ->count();
-            if ($filled >= $target->capacity) {
-                return back()->with('error', 'Kelas tujuan sudah penuh. Pilih kelas lain.');
+        $capacityExceeded = DB::transaction(function () use ($registration, $data, $request) {
+            if ($data['decision'] === 'approved') {
+                $target = PracticumClass::whereKey($data['final_class_id'])->lockForUpdate()->firstOrFail();
+                $pending = $target->registrations()
+                    ->where('status', 'pending_verification')
+                    ->where('id', '!=', $registration->id)
+                    ->count();
+                $approved = $target->finalRegistrations()
+                    ->where('status', 'approved')
+                    ->where('id', '!=', $registration->id)
+                    ->count();
+                if ($pending + $approved >= $target->capacity) {
+                    return true;
+                }
             }
-        }
 
-        DB::transaction(function () use ($registration, $data, $request) {
             $registration->update([
                 'status' => $data['decision'],
                 'final_class_id' => $data['decision'] === 'approved' ? $data['final_class_id'] : null,
@@ -392,7 +401,13 @@ class AdminController extends Controller
                 'verified_at' => now(),
                 'note' => $data['admin_note'] ?? null,
             ]);
+
+            return false;
         });
+
+        if ($capacityExceeded) {
+            return back()->with('error', 'Kapasitas kelas tujuan sudah penuh. Pilih kelas lain.');
+        }
 
         return back()->with('success', 'Verifikasi pendaftaran praktikum diperbarui.');
     }

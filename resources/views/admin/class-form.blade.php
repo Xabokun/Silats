@@ -102,17 +102,22 @@
                                 <input type="time" class="form-control" name="end_time" value="{{ old('end_time', $class->end_time) }}" required>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label class="form-label">Tanggal Praktikum</label>
                                 <input type="date" class="form-control" name="practicum_date" value="{{ old('practicum_date', optional($class->practicum_date)->format('Y-m-d')) }}">
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label class="form-label">Mulai Pengisian / Pemilihan Jadwal</label>
+                                <input type="datetime-local" class="form-control" name="enrollment_starts_at" value="{{ old('enrollment_starts_at', optional($class->enrollment_starts_at)->format('Y-m-d\\TH:i')) }}">
+                            </div>
+
+                            <div class="col-md-3">
                                 <label class="form-label">Batas Pengisian</label>
                                 <input type="datetime-local" class="form-control" name="enrollment_deadline" value="{{ old('enrollment_deadline', optional($class->enrollment_deadline)->format('Y-m-d\\TH:i')) }}">
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label class="form-label">Modul PDF</label>
                                 <input type="file" class="form-control" name="module_file" accept="application/pdf">
                                 @if($class->module_path)<a class="small" target="_blank" href="{{ asset('storage/'.$class->module_path) }}">Lihat modul saat ini</a>@endif
